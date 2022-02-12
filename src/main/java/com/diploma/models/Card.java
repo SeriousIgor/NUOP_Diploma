@@ -4,12 +4,14 @@ import java.math.BigInteger;
 
 public class Card {
     private BigInteger cardId;
+    private Client client;
     private boolean isDiscount;
     private int discountPercentage;
     private double bonuses;
 
-    public Card(BigInteger cardId, boolean isDiscount, int discountPercentage, double bonuses) {
+    public Card(BigInteger cardId, Client client, boolean isDiscount, int discountPercentage, double bonuses) {
         this.cardId = cardId;
+        this.client = client;
         this.isDiscount = isDiscount;
         this.discountPercentage = discountPercentage;
         this.bonuses = bonuses;
@@ -21,6 +23,14 @@ public class Card {
 
     public void setCardId(BigInteger cardId) {
         this.cardId = cardId;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public boolean isDiscount() {

@@ -3,15 +3,15 @@ package com.diploma.models;
 import com.diploma.models.enumeration.WordLogAction;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class WorkLog {
     private BigInteger workLogId;
     private BigInteger userId;
     private WordLogAction action;
-    private Date logDate;
+    private Timestamp logDate;
 
-    public WorkLog(BigInteger workLogId, BigInteger userId, WordLogAction action, Date logDate) {
+    public WorkLog(BigInteger workLogId, BigInteger userId, WordLogAction action, Timestamp logDate) {
         this.workLogId = workLogId;
         this.userId = userId;
         this.action = action;
@@ -42,11 +42,11 @@ public class WorkLog {
         this.action = action;
     }
 
-    public Date getLogDate() {
+    public Timestamp getLogDate() {
         return logDate;
     }
 
-    public void setLogDate(Date logDate) {
+    public void setLogDate(Timestamp logDate) {
         this.logDate = logDate;
     }
 }

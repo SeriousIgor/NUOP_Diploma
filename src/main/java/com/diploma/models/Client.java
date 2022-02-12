@@ -6,11 +6,13 @@ public class Client {
     private BigInteger clientId;
     private String firstName;
     private String lastName;
+    private String phoneNubmer;
 
-    public Client(BigInteger clientId, String firstName, String lastName) {
+    public Client(BigInteger clientId, String firstName, String lastName, String phoneNubmer) {
         this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phoneNubmer = phoneNubmer;
     }
 
     public BigInteger getClientId() {
@@ -35,5 +37,13 @@ public class Client {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoneNubmer() {
+        return phoneNubmer;
+    }
+
+    public void setPhoneNubmer(String phoneNubmer) {
+        this.phoneNubmer = phoneNubmer;
     }
 }
