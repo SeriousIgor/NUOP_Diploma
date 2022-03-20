@@ -3,15 +3,28 @@ package com.diploma.models;
 import com.diploma.models.enumeration.OrderStatus;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 
 public class Order {
     private BigInteger orderId;
+    private String name;
     private OrderStatus status;
     private Double price;
-    private BigInteger userId;
-    private BigInteger clientId;
+    private String description;
+    private Timestamp orderDate;
+    private User user;
+    private Client client;
 
-
+    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, User user, Client client) {
+        this.orderId = orderId;
+        this.name = name;
+        this.status = status;
+        this.price = price;
+        this.description = description;
+        this.orderDate = orderDate;
+        this.user = user;
+        this.client = client;
+    }
 
     public BigInteger getOrderId() {
         return orderId;
@@ -19,6 +32,14 @@ public class Order {
 
     public void setOrderId(BigInteger orderId) {
         this.orderId = orderId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public OrderStatus getStatus() {
@@ -37,19 +58,35 @@ public class Order {
         this.price = price;
     }
 
-    public BigInteger getUserId() {
-        return userId;
+    public String getDescription(){
+        return description;
     }
 
-    public void setUserId(BigInteger userId) {
-        this.userId = userId;
+    public void setDescription(String description){
+        this.description = description;
     }
 
-    public BigInteger getClientId() {
-        return clientId;
+    public Timestamp getOrderDate() {
+        return orderDate;
     }
 
-    public void setClientId(BigInteger clientId) {
-        this.clientId = clientId;
+    public void setOrderDate(Timestamp orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
