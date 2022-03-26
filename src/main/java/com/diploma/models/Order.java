@@ -4,6 +4,7 @@ import com.diploma.models.enumeration.OrderStatus;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 public class Order {
     private BigInteger orderId;
@@ -14,8 +15,9 @@ public class Order {
     private Timestamp orderDate;
     private User user;
     private Client client;
+    private Collection<Service> services;
 
-    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, User user, Client client) {
+    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, User user, Client client, Collection<Service> services) {
         this.orderId = orderId;
         this.name = name;
         this.status = status;
@@ -24,6 +26,7 @@ public class Order {
         this.orderDate = orderDate;
         this.user = user;
         this.client = client;
+        this.services = services;
     }
 
     public BigInteger getOrderId() {
@@ -88,5 +91,13 @@ public class Order {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Collection<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(Collection<Service> services) {
+        this.services = services;
     }
 }

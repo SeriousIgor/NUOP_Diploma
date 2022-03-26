@@ -1,18 +1,21 @@
 package com.diploma.nuop_diploma;
 
 import com.diploma.dao.implementation.OrderDaoImplementation;
+import com.diploma.dao.implementation.OrderServiceBundleDaoImplementation;
+import com.diploma.dao.implementation.ServiceDaoImplementation;
 import com.diploma.models.Order;
+import com.diploma.models.OrderServiceBundle;
+import com.diploma.models.Service;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class HelloApplication extends Application {
     @Override
@@ -29,17 +32,29 @@ public class HelloApplication extends Application {
         stage.show();*/
 
         try {
-            OrderDaoImplementation odi = new OrderDaoImplementation();
-            BigInteger orderId = BigInteger.valueOf(1);
-            Order o = odi.getOrder(orderId);
-            o.setOrderId(BigInteger.valueOf(10));
-            o.setName("Test3");
-            o.setDescription("TestTest3");
-            odi.createOrder(o);
-            Collection<Order> orders = odi.getOrders(BigInteger.valueOf(1));
-            for(Order order : orders){
-                System.out.println(order.getName());
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/OrderAccounting.db");
+            Statement stm = connection.createStatement();
+            OrderDaoImplementation odi = new OrderDaoImplementation(connection, stm);
+            ServiceDaoImplementation sdi = new ServiceDaoImplementation(connection, stm);
+
+            BigInteger orderId = BigInteger.valueOf(14);
+            Order order = odi.getOrder(orderId);
+            for(Service s : order.getServices()){
+                System.out.println(s.getName());
             }
+
+            Service service2 = sdi.getService(BigInteger.valueOf(3));
+            Service service = sdi.getService(BigInteger.valueOf(1));
+            Collection<Service> serviceCollection = new ArrayList<Service>();
+            serviceCollection.add(service);
+            serviceCollection.add(service2);
+            order.setServices(serviceCollection);
+            for(Service s : order.getServices()){
+                System.out.println(s.getName());
+            }
+
+            System.out.println(odi.updateOrder(order));
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
