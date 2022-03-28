@@ -17,58 +17,28 @@ public class ClientDaoImplementation implements ClientDao {
         stm = connection.createStatement();
     }
 
+    public ClientDaoImplementation(Connection connection, Statement stm) throws SQLException {
+        this.connection = connection;
+        this.stm = stm;
+    }
+
     @Override
     public Client getClient(BigInteger clientId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(ClientDao.GET_CLIENT + clientId);
-        Client client = null;
-        if (resultSet.next()){
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String phoneNumber = resultSet.getString("phoneNumber");
-            client = new Client(clientId, firstName, lastName, phoneNumber);
-            return client;
-        } else {
-            throw new SQLException("No records found");
-        }
+        return buildClient(resultSet);
     }
 
     @Override
     public Collection<Client> getClients() throws SQLException {
         ResultSet resultSet = stm.executeQuery(ClientDao.GET_CLIENTS);
-        ArrayList<Client> clientList = new ArrayList<Client>();
-        if(resultSet.next()){
-            do {
-                BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phoneNumber = resultSet.getString("phoneNumber");
-                Client client = new Client(clientId, firstName, lastName, phoneNumber);
-                clientList.add(client);
-            } while (resultSet.next());
-            return clientList;
-        } else {
-            throw new SQLException("No records found");
-        }
+        return buildClientList(resultSet);
     }
 
     @Override
     public Collection<Client> getClients(String name) throws SQLException {
         String partOfQuery = String.join(name.toLowerCase(), "(firstName like '%", "%' OR lastName like '%", "%')");
         ResultSet resultSet = stm.executeQuery(ClientDao.GET_CLIENTS_BY_NAME + partOfQuery);
-        ArrayList<Client> clientList = new ArrayList<Client>();
-        if(resultSet.next()){
-            do {
-                BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phoneNumber = resultSet.getString("phoneNumber");
-                Client client = new Client(clientId, firstName, lastName, phoneNumber);
-                clientList.add(client);
-            } while (resultSet.next());
-            return clientList;
-        } else {
-            throw new SQLException("No records found");
-        }
+        return buildClientList(resultSet);
     }
 
     @Override
@@ -89,5 +59,31 @@ public class ClientDaoImplementation implements ClientDao {
     public Boolean deleteClient(BigInteger clientId) throws SQLException {
         Boolean result = stm.executeUpdate(ClientDao.DELETE_CLIENT + clientId) == 1;
         return result;
+    }
+
+    private Client buildClient(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            String phoneNumber = resultSet.getString("phoneNumber");
+            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+            Client client = new Client(clientId, firstName, lastName, phoneNumber, isDeleted);
+            return client;
+        } else {
+            throw new SQLException("No records found");
+        }
+    }
+
+    private Collection<Client> buildClientList(ResultSet resultSet) throws SQLException {
+        Collection<Client> clientList = new ArrayList<Client>();
+        if(resultSet.next()){
+            do {
+                clientList.add(buildClient(resultSet));
+            } while (resultSet.next());
+            return clientList;
+        } else {
+            throw new SQLException("No records found");
+        }
     }
 }

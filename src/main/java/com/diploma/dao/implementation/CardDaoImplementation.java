@@ -18,73 +18,27 @@ public class CardDaoImplementation implements CardDao {
         stm = connection.createStatement();
     }
 
+    public CardDaoImplementation(Connection connection, Statement stm) throws SQLException {
+        this.connection = connection;
+        this.stm = stm;
+    }
+
     @Override
     public Card getCard(BigInteger cardId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(CardDao.GET_CARD + cardId);
-        Card card;
-        if (resultSet.next()){
-            Boolean isDiscount = resultSet.getInt("isDiscount") == 1;
-            Integer discountPercentage = resultSet.getInt("discountPercentage");
-            Double bonuses = resultSet.getDouble("bonuses");
-            BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String phoneNumber = resultSet.getString("phoneNumber");
-            Client client = new Client(clientId, firstName, lastName, phoneNumber);
-            card = new Card(cardId, client, isDiscount, discountPercentage, bonuses);
-            return card;
-        } else {
-            throw new SQLException("No records found");
-        }
+        return buildCard(resultSet);
     }
 
     @Override
     public Collection<Card> getCards() throws SQLException {
         ResultSet resultSet = stm.executeQuery(CardDao.GET_CARDS);
-        Collection<Card> cardList = new ArrayList<>();
-        if (resultSet.next()){
-            do{
-                BigInteger cardId = BigInteger.valueOf(resultSet.getInt("cardId"));
-                Boolean isDiscount = resultSet.getInt("isDiscount") == 1;
-                Integer discountPercentage = resultSet.getInt("discountPercentage");
-                Double bonuses = resultSet.getDouble("bonuses");
-                BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phoneNumber = resultSet.getString("phoneNumber");
-                Client client = new Client(clientId, firstName, lastName, phoneNumber);
-                Card card = new Card(cardId, client, isDiscount, discountPercentage, bonuses);
-                cardList.add(card);
-            } while(resultSet.next());
-
-            return cardList;
-        } else {
-            throw new SQLException("No records found");
-        }
+        return buildCardList(resultSet);
     }
 
     @Override
     public Collection<Card> getCards(BigInteger clientId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(CardDao.GET_CARDS_BY_CLIENT + clientId);
-        Collection<Card> cardList = new ArrayList<>();
-        if(resultSet.next()){
-            do{
-                BigInteger cardId = BigInteger.valueOf(resultSet.getInt("cardId"));
-                Boolean isDiscount = resultSet.getInt("isDiscount") == 1;
-                Integer discountPercentage = resultSet.getInt("discountPercentage");
-                Double bonuses = resultSet.getDouble("bonuses");
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phoneNumber = resultSet.getString("phoneNumber");
-                Client client = new Client(clientId, firstName, lastName, phoneNumber);
-                Card card = new Card(cardId, client, isDiscount, discountPercentage, bonuses);
-                cardList.add(card);
-            } while (resultSet.next());
-
-            return cardList;
-        } else {
-            throw new SQLException("No records found");
-        }
+        return buildCardList(resultSet);
     }
 
     @Override
@@ -107,5 +61,39 @@ public class CardDaoImplementation implements CardDao {
     public Boolean deleteCard(BigInteger cardId) throws SQLException {
         Boolean result = stm.executeUpdate(CardDao.DELETE_CARD + cardId) == 1;
         return result;
+    }
+
+    private Card buildCard(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()){
+            BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            String phoneNumber = resultSet.getString("phoneNumber");
+            Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
+            Client client = new Client(clientId, firstName, lastName, phoneNumber, clientIsDeleted);
+
+            BigInteger cardId = BigInteger.valueOf(resultSet.getInt("cardId"));
+            Boolean isDiscount = resultSet.getInt("isDiscount") == 1;
+            Integer discountPercentage = resultSet.getInt("discountPercentage");
+            Double bonuses = resultSet.getDouble("bonuses");
+            Boolean cardIsDeleted = resultSet.getInt("isDeleted") == 1;
+            Card card = new Card(cardId, client, isDiscount, discountPercentage, bonuses, cardIsDeleted);
+
+            return card;
+        } else {
+            throw new SQLException("No records found");
+        }
+    }
+
+    private Collection<Card> buildCardList(ResultSet resultSet) throws SQLException {
+        Collection<Card> cardList = new ArrayList<>();
+        if (resultSet.next()){
+        do{
+            cardList.add(buildCard(resultSet));
+        } while(resultSet.next());
+            return cardList;
+        } else {
+            throw new SQLException("No records found");
+        }
     }
 }

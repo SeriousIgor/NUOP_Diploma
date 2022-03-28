@@ -7,12 +7,14 @@ public class Client {
     private String firstName;
     private String lastName;
     private String phoneNubmer;
+    private boolean isDeleted;
 
-    public Client(BigInteger clientId, String firstName, String lastName, String phoneNubmer) {
+    public Client(BigInteger clientId, String firstName, String lastName, String phoneNubmer, boolean isDeleted) {
         this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNubmer = phoneNubmer;
+        this.isDeleted = isDeleted;
     }
 
     public BigInteger getClientId() {

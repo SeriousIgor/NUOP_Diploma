@@ -9,14 +9,16 @@ public class User {
     private String lastName;
     private String password;
     private boolean isAdmin;
+    private boolean isDeleted;
 
-    public User(BigInteger userId, String userName, String firstName, String lastName, String password, boolean isAdmin) {
+    public User(BigInteger userId, String userName, String firstName, String lastName, String password, boolean isAdmin, boolean isDeleted) {
         this.userId = userId;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.isDeleted = isDeleted;
     }
 
     public BigInteger getUserId() {

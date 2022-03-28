@@ -6,11 +6,13 @@ public class OrderServiceBundle {
     private BigInteger orderServiceBundleId;
     private BigInteger orderId;
     private BigInteger serviceId;
+    private boolean isDeleted;
 
-    public OrderServiceBundle(BigInteger orderServiceBundleId, BigInteger orderId, BigInteger serviceId) {
+    public OrderServiceBundle(BigInteger orderServiceBundleId, BigInteger orderId, BigInteger serviceId, boolean isDeleted) {
         this.orderServiceBundleId = orderServiceBundleId;
         this.orderId = orderId;
         this.serviceId = serviceId;
+        this.isDeleted = isDeleted;
     }
 
     public BigInteger getOrderServiceBundleId() {

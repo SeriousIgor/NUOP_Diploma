@@ -2,6 +2,7 @@ package com.diploma.dao.implementation;
 
 import com.diploma.dao.ServiceDao;
 import com.diploma.models.Service;
+import com.diploma.models.User;
 
 import java.math.BigInteger;
 import java.sql.*;
@@ -17,7 +18,7 @@ public class ServiceDaoImplementation implements ServiceDao {
         stm = connection.createStatement();
     }
 
-    public ServiceDaoImplementation(Connection connection, Statement stm) {
+    public ServiceDaoImplementation(Connection connection, Statement stm) throws SQLException {
         this.connection = connection;
         this.stm = stm;
     }
@@ -25,56 +26,20 @@ public class ServiceDaoImplementation implements ServiceDao {
     @Override
     public Service getService(BigInteger serviceId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(ServiceDao.GET_SERVICE + serviceId);
-        if(resultSet.next()){
-            String name = resultSet.getString("name");
-            Double price = resultSet.getDouble("price");
-            String description = resultSet.getString("description");
-            Service service = new Service(serviceId, name, price, description);
-            return service;
-        } else {
-            throw new SQLException("Service not found");
-        }
+        return buildService(resultSet);
     }
 
     @Override
     public Collection<Service> getServices() throws SQLException {
         ResultSet resultSet = stm.executeQuery(ServiceDao.GET_SERVICES);
-        Collection<Service> serviceList = new ArrayList<Service>();
-        if (resultSet.next()) {
-            do {
-                BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-                String name = resultSet.getString("name");
-                Double price = resultSet.getDouble("price");
-                String description = resultSet.getString("description");
-                Service service = new Service(serviceId, name, price, description);
-                serviceList.add(service);
-            } while (resultSet.next());
-
-            return serviceList;
-        } else {
-            throw new SQLException("Services not found");
-        }
+        return buildServiceList(resultSet);
     }
 
     @Override
     public Collection<Service> getServices(String serviceName) throws SQLException {
         serviceName = new StringBuilder().append("'%").append(serviceName).append("%'").toString();
         ResultSet resultSet = stm.executeQuery(ServiceDao.GET_SERVICES_BY_NAME + serviceName);
-        Collection<Service> serviceList = new ArrayList<Service>();
-        if (resultSet.next()) {
-            do {
-                BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-                String name = resultSet.getString("name");
-                Double price = resultSet.getDouble("price");
-                String description = resultSet.getString("description");
-                Service service = new Service(serviceId, name, price, description);
-                serviceList.add(service);
-            } while (resultSet.next());
-
-            return serviceList;
-        } else {
-            throw new SQLException("Services not found");
-        }
+        return buildServiceList(resultSet);
     }
 
     @Override
@@ -86,21 +51,7 @@ public class ServiceDaoImplementation implements ServiceDao {
             maxPrice = Double.MAX_VALUE;
         }
         ResultSet resultSet = stm.executeQuery(ServiceDao.GET_SERVICES_BY_PRICE  + minPrice + " AND price <= " + maxPrice);
-        Collection<Service> serviceList = new ArrayList<Service>();
-        if (resultSet.next()) {
-            do {
-                BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-                String name = resultSet.getString("name");
-                Double price = resultSet.getDouble("price");
-                String description = resultSet.getString("description");
-                Service service = new Service(serviceId, name, price, description);
-                serviceList.add(service);
-            } while (resultSet.next());
-
-            return serviceList;
-        } else {
-            throw new SQLException("Services not found");
-        }
+        return buildServiceList(resultSet);
     }
 
     @Override
@@ -122,5 +73,33 @@ public class ServiceDaoImplementation implements ServiceDao {
         String query = ServiceDao.DELETE_SERVICE + serviceId;
         Boolean result = stm.executeUpdate(query) == 1;
         return result;
+    }
+
+    private Service buildService(ResultSet resultSet) throws SQLException {
+        if(resultSet.next()){
+            BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
+            String name = resultSet.getString("name");
+            Double price = resultSet.getDouble("price");
+            String description = resultSet.getString("description");
+            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+            Service service = new Service(serviceId, name, price, description, isDeleted);
+
+            return service;
+        } else {
+            throw new SQLException("Service not found");
+        }
+    }
+
+    private Collection<Service> buildServiceList(ResultSet resultSet) throws SQLException {
+        Collection<Service> serviceList = new ArrayList<Service>();
+        if (resultSet.next()) {
+            do {
+                serviceList.add(buildService(resultSet));
+            } while (resultSet.next());
+
+            return serviceList;
+        } else {
+            throw new SQLException("Services not found");
+        }
     }
 }

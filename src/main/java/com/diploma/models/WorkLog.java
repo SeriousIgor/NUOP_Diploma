@@ -1,6 +1,6 @@
 package com.diploma.models;
 
-import com.diploma.models.enumeration.WordLogAction;
+import com.diploma.models.enumeration.WorkLogAction;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -8,10 +8,10 @@ import java.sql.Timestamp;
 public class WorkLog {
     private BigInteger workLogId;
     private BigInteger userId;
-    private WordLogAction action;
+    private WorkLogAction action;
     private Timestamp logDate;
 
-    public WorkLog(BigInteger workLogId, BigInteger userId, WordLogAction action, Timestamp logDate) {
+    public WorkLog(BigInteger workLogId, BigInteger userId, WorkLogAction action, Timestamp logDate) {
         this.workLogId = workLogId;
         this.userId = userId;
         this.action = action;
@@ -34,11 +34,11 @@ public class WorkLog {
         this.userId = userId;
     }
 
-    public WordLogAction getAction() {
+    public WorkLogAction getAction() {
         return action;
     }
 
-    public void setAction(WordLogAction action) {
+    public void setAction(WorkLogAction action) {
         this.action = action;
     }
 

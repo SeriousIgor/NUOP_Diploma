@@ -16,8 +16,9 @@ public class Order {
     private User user;
     private Client client;
     private Collection<Service> services;
+    private boolean isDeleted;
 
-    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, User user, Client client, Collection<Service> services) {
+    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, User user, Client client, Collection<Service> services, boolean isDeleted) {
         this.orderId = orderId;
         this.name = name;
         this.status = status;
@@ -27,6 +28,7 @@ public class Order {
         this.user = user;
         this.client = client;
         this.services = services;
+        this.isDeleted = isDeleted;
     }
 
     public BigInteger getOrderId() {

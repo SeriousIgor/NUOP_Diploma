@@ -24,37 +24,37 @@ public interface OrderDao {
 
     Boolean deleteOrder(BigInteger orderId) throws SQLException;
 
-    String GET_ORDER = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, " +
-                            "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", " +
-                            "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\" " +
+    String GET_ORDER = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, o.isDeleted, " +
+                            "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", client.isDeleted as \"client.isDeleted\"," +
+                            "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\", user.isDeleted as \"user.isDeleted\" " +
                         "FROM Orders o " +
                         "LEFT JOIN Client client ON o.clientId = client.clientId " +
                         "LEFT JOIN User user ON o.userId = user.userId " +
                         "WHERE orderId = ";
-    String GET_ORDER_BY_DATE = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, " +
-                            "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", " +
-                            "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\" " +
+    String GET_ORDER_BY_DATE = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, o.isDeleted, " +
+                            "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", client.isDeleted as \"client.isDeleted\", " +
+                            "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\", user.isDeleted as \"user.isDeleted\" " +
                         "FROM Orders o " +
                         "LEFT JOIN Client client ON o.clientId = client.clientId " +
                         "LEFT JOIN User user ON o.userId = user.userId " +
                         "WHERE orderDate = ";
-    String GET_ORDERS = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, " +
-                            "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", " +
-                            "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\" " +
+    String GET_ORDERS = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, o.isDeleted, " +
+                            "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", client.isDeleted as \"client.isDeleted\", " +
+                            "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\", user.isDeleted as \"user.isDeleted\" " +
                         "FROM Orders o " +
                         "LEFT JOIN Client client ON o.clientId = client.clientId " +
                         "LEFT JOIN User user ON o.userId = user.userId " +
                         "WHERE o.isDeleted = 0";
-    String GET_ORDERS_BY_NAME = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, " +
-                        "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", " +
-                        "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\" " +
+    String GET_ORDERS_BY_NAME = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, o.isDeleted, " +
+                        "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", client.isDeleted as \"client.isDeleted\", " +
+                        "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\", user.isDeleted as \"user.isDeleted\" " +
                         "FROM Orders o " +
                         "LEFT JOIN Client client ON o.clientId = client.clientId " +
                         "LEFT JOIN User user ON o.userId = user.userId " +
                         "WHERE name like ";
-    String GET_ORDERS_BY_CLIENT = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, " +
-                        "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", " +
-                        "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\" " +
+    String GET_ORDERS_BY_CLIENT = "SELECT orderId, name, status, price, description, orderDate, o.userId, o.clientId, o.isDeleted, " +
+                        "client.clientId as \"client.clientId\", client.firstName as \"client.firstName\", client.lastName as \"client.lastName\", client.phoneNumber as \"client.phoneNumber\", client.isDeleted as \"client.isDeleted\", " +
+                        "user.userId as \"user.userId\", user.username as \"user.username\", user.firstName as \"user.firstName\", user.lastName as \"user.lastName\", user.password as \"user.password\", user.isAdmin as \"user.isAdmin\", user.isDeleted as \"user.isDeleted\" " +
                         "FROM Orders o " +
                         "LEFT JOIN Client client ON o.clientId = client.clientId " +
                         "LEFT JOIN User user ON o.userId = user.userId " +

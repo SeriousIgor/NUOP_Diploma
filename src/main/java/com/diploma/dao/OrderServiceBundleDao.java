@@ -24,10 +24,10 @@ public interface OrderServiceBundleDao {
 
     Boolean hardDeleteOrderServiceBundle(BigInteger orderServiceBundleId) throws SQLException;
 
-    String GET_ORDERSERVICEBUNDLE = "SELECT orderServiceBundleId, orderId, serviceId FROM OrderServiceBundle WHERE orderServiceBundleId = ";
-    String GET_ORDERSERVICEBUNDLES = "SELECT orderServiceBundleId, orderId, serviceId FROM OrderServiceBundle WHERE isDeleted = 0";
-    String GET_ORDERSERVICEBUNDLES_BY_ORDER = "SELECT orderServiceBundleId, orderId, serviceId FROM OrderServiceBundle WHERE orderId = ";
-    String GET_ORDERSERVICEBUNDLES_BY_SERVICE_AND_ORDER = "SELECT orderServiceBundleId, orderId, serviceId FROM OrderServiceBundle WHERE orderId = ";
+    String GET_ORDERSERVICEBUNDLE = "SELECT orderServiceBundleId, orderId, serviceId, isDeleted FROM OrderServiceBundle WHERE orderServiceBundleId = ";
+    String GET_ORDERSERVICEBUNDLES = "SELECT orderServiceBundleId, orderId, serviceId, isDeleted FROM OrderServiceBundle WHERE isDeleted = 0";
+    String GET_ORDERSERVICEBUNDLES_BY_ORDER = "SELECT orderServiceBundleId, orderId, serviceId, isDeleted FROM OrderServiceBundle WHERE orderId = ";
+    String GET_ORDERSERVICEBUNDLES_BY_SERVICE_AND_ORDER = "SELECT orderServiceBundleId, orderId, serviceId, isDeleted FROM OrderServiceBundle WHERE orderId = ";
     String CREATE_ORDERSERVICEBUNDLE = "INSERT INTO OrderServiceBundle (orderId, serviceId) VALUES (";
     String UPDATE_ORDERSERVICEBUNDLE = "UPDATE OrderServiceBundle SET ";
     String DELETE_ORDERSERVICEBUNDLE = "UPDATE OrderServiceBundle SET isDeleted = 1 WHERE orderServiceBundleId = ";

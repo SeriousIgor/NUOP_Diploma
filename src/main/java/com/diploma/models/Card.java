@@ -6,15 +6,17 @@ public class Card {
     private BigInteger cardId;
     private Client client;
     private boolean isDiscount;
-    private int discountPercentage;
-    private double bonuses;
+    private Integer discountPercentage;
+    private Double bonuses;
+    private boolean isDeleted;
 
-    public Card(BigInteger cardId, Client client, boolean isDiscount, int discountPercentage, double bonuses) {
+    public Card(BigInteger cardId, Client client, boolean isDiscount, Integer discountPercentage, Double bonuses, boolean isDeleted) {
         this.cardId = cardId;
         this.client = client;
         this.isDiscount = isDiscount;
         this.discountPercentage = discountPercentage;
         this.bonuses = bonuses;
+        this.isDeleted = isDeleted;
     }
 
     public BigInteger getCardId() {

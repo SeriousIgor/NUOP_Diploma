@@ -19,19 +19,19 @@ public interface CardDao {
 
     Boolean deleteCard(BigInteger cardId) throws SQLException;
 
-    String GET_CARD = "SELECT cardId, card.clientId, isDiscount, discountPercentage, bonuses, " +
-                            "client.firstName, client.lastName, client.phoneNumber " +
+    String GET_CARD = "SELECT cardId, card.clientId, isDiscount, discountPercentage, bonuses, card.isDeleted, " +
+                            "client.firstName, client.lastName, client.phoneNumber, client.isDeleted as \"client.isDeleted\" " +
                       "FROM Card card " +
                       "LEFT JOIN Client client ON card.clientId = client.clientId " +
                       "WHERE cardId = ";
 
-    String GET_CARDS = "SELECT cardId, card.clientId, isDiscount, discountPercentage, bonuses, " +
-                            "client.firstName, client.lastName, client.phoneNumber " +
+    String GET_CARDS = "SELECT cardId, card.clientId, isDiscount, discountPercentage, bonuses, card.isDeleted, " +
+                            "client.firstName, client.lastName, client.phoneNumber, client.isDeleted as \"client.isDeleted\" " +
                         "FROM Card card " +
                         "LEFT JOIN Client client ON card.clientId = client.clientId " +
                         "WHERE card.isDeleted = 0";
-    String GET_CARDS_BY_CLIENT = "SELECT cardId, card.clientId, isDiscount, discountPercentage, bonuses, " +
-                        "client.firstName, client.lastName, client.phoneNumber " +
+    String GET_CARDS_BY_CLIENT = "SELECT cardId, card.clientId, isDiscount, discountPercentage, bonuses, card.isDeleted, " +
+                        "client.firstName, client.lastName, client.phoneNumber, client.isDeleted as \"client.isDeleted\" " +
                         "FROM Card card " +
                         "LEFT JOIN Client client ON card.clientId = client.clientId " +
                         "WHERE card.isDeleted = 0 AND card.clientId = ";

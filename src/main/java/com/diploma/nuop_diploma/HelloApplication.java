@@ -3,9 +3,11 @@ package com.diploma.nuop_diploma;
 import com.diploma.dao.implementation.OrderDaoImplementation;
 import com.diploma.dao.implementation.OrderServiceBundleDaoImplementation;
 import com.diploma.dao.implementation.ServiceDaoImplementation;
+import com.diploma.dao.implementation.WorkLogDaoImplementation;
 import com.diploma.models.Order;
 import com.diploma.models.OrderServiceBundle;
 import com.diploma.models.Service;
+import com.diploma.models.WorkLog;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -34,27 +36,8 @@ public class HelloApplication extends Application {
         try {
             Connection connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/OrderAccounting.db");
             Statement stm = connection.createStatement();
-            OrderDaoImplementation odi = new OrderDaoImplementation(connection, stm);
-            ServiceDaoImplementation sdi = new ServiceDaoImplementation(connection, stm);
-
-            BigInteger orderId = BigInteger.valueOf(14);
-            Order order = odi.getOrder(orderId);
-            for(Service s : order.getServices()){
-                System.out.println(s.getName());
-            }
-
-            Service service2 = sdi.getService(BigInteger.valueOf(3));
-            Service service = sdi.getService(BigInteger.valueOf(1));
-            Collection<Service> serviceCollection = new ArrayList<Service>();
-            serviceCollection.add(service);
-            serviceCollection.add(service2);
-            order.setServices(serviceCollection);
-            for(Service s : order.getServices()){
-                System.out.println(s.getName());
-            }
-
-            System.out.println(odi.updateOrder(order));
-
+            WorkLogDaoImplementation wdi = new WorkLogDaoImplementation(connection, stm);
+            System.out.println(wdi.getWorkLogs(null, null).size());
         } catch (SQLException e) {
             e.printStackTrace();
         }

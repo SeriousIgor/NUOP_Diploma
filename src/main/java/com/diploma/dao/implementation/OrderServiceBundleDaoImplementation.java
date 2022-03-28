@@ -1,6 +1,7 @@
 package com.diploma.dao.implementation;
 
 import com.diploma.dao.OrderServiceBundleDao;
+import com.diploma.models.Order;
 import com.diploma.models.OrderServiceBundle;
 import com.diploma.models.Service;
 
@@ -21,68 +22,25 @@ public class OrderServiceBundleDaoImplementation implements OrderServiceBundleDa
     @Override
     public OrderServiceBundle getOrderServiceBundle(BigInteger orderServiceBundleId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderServiceBundleDao.GET_ORDERSERVICEBUNDLE + orderServiceBundleId);
-        if(resultSet.next()){
-            BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
-            BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-            OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId);
-            return orderServiceBundle;
-        } else {
-            throw new SQLException("OrderServiceBundle not found");
-        }
+        return buildOrderServiceBundle(resultSet);
     }
 
     @Override
     public Collection<OrderServiceBundle> getOrderServiceBundles() throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderServiceBundleDao.GET_ORDERSERVICEBUNDLES);
-        Collection<OrderServiceBundle> orderServiceBundleList = new ArrayList<OrderServiceBundle>();
-        if(resultSet.next()){
-            do{
-                BigInteger orderServiceBundleId = BigInteger.valueOf(resultSet.getInt("orderServiceBundleId"));
-                BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
-                BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-                OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId);
-                orderServiceBundleList.add(orderServiceBundle);
-            } while(resultSet.next());
-
-            return orderServiceBundleList;
-        } else {
-            throw new SQLException("OrderServiceBundles not found");
-        }
+        return buildOrderServiceBundleList(resultSet);
     }
 
     @Override
     public Collection<OrderServiceBundle> getOrderServiceBundles(BigInteger orderId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderServiceBundleDao.GET_ORDERSERVICEBUNDLES_BY_ORDER + orderId);
-        Collection<OrderServiceBundle> orderServiceBundleList = new ArrayList<OrderServiceBundle>();
-        if(resultSet.next()){
-            do{
-                BigInteger orderServiceBundleId = BigInteger.valueOf(resultSet.getInt("orderServiceBundleId"));
-                BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-                OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId);
-                orderServiceBundleList.add(orderServiceBundle);
-            } while(resultSet.next());
-
-            return orderServiceBundleList;
-        } else {
-            throw new SQLException("OrderServiceBundles not found");
-        }
+        return buildOrderServiceBundleList(resultSet);
     }
 
     @Override
     public Collection<OrderServiceBundle> getOrderServiceBundles(BigInteger orderId, BigInteger serviceId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderServiceBundleDao.GET_ORDERSERVICEBUNDLES_BY_SERVICE_AND_ORDER + orderId + " AND serviceId = " + serviceId);
-        Collection<OrderServiceBundle> orderServiceBundleList = new ArrayList<OrderServiceBundle>();
-        if(resultSet.next()){
-            do{
-                BigInteger orderServiceBundleId = BigInteger.valueOf(resultSet.getInt("orderServiceBundleId"));
-                OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId);
-                orderServiceBundleList.add(orderServiceBundle);
-            } while(resultSet.next());
-
-            return orderServiceBundleList;
-        } else {
-            throw new SQLException("OrderServiceBundles not found");
-        }
+        return buildOrderServiceBundleList(resultSet);
     }
 
     @Override
@@ -111,5 +69,31 @@ public class OrderServiceBundleDaoImplementation implements OrderServiceBundleDa
         String query = OrderServiceBundleDao.HARD_DELETE_ORDERSERVICEBUNDLE + orderServiceBundleId;
         Boolean result = stm.executeUpdate(query) == 1;
         return  result;
+    }
+
+    private OrderServiceBundle buildOrderServiceBundle(ResultSet resultSet) throws SQLException {
+        if(resultSet.next()){
+            BigInteger orderServiceBundleId = BigInteger.valueOf(resultSet.getInt("orderServiceBundleId"));
+            BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
+            BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
+            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+            OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId, isDeleted);
+            return orderServiceBundle;
+        } else {
+            throw new SQLException("OrderServiceBundle not found");
+        }
+    }
+
+    private Collection<OrderServiceBundle> buildOrderServiceBundleList(ResultSet resultSet) throws SQLException {
+        Collection<OrderServiceBundle> orderServiceBundleList = new ArrayList<OrderServiceBundle>();
+        if(resultSet.next()){
+            do{
+                orderServiceBundleList.add(buildOrderServiceBundle(resultSet));
+            } while(resultSet.next());
+
+            return orderServiceBundleList;
+        } else {
+            throw new SQLException("OrderServiceBundles not found");
+        }
     }
 }

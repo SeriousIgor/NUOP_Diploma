@@ -7,12 +7,14 @@ public class Service {
     private String name;
     private Double price;
     private String description;
+    private boolean isDeleted;
 
-    public Service(BigInteger serviceId, String name, Double price, String description) {
+    public Service(BigInteger serviceId, String name, Double price, String description, boolean isDeleted) {
         this.serviceId = serviceId;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.isDeleted = isDeleted;
     }
 
     public BigInteger getServiceId() {
