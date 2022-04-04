@@ -26,7 +26,11 @@ public class ServiceDaoImplementation implements ServiceDao {
     @Override
     public Service getService(BigInteger serviceId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(ServiceDao.GET_SERVICE + serviceId);
-        return buildService(resultSet);
+        if(resultSet.next()){
+            return buildService(resultSet);
+        } else {
+            throw new SQLException("Service not found");
+        }
     }
 
     @Override
@@ -76,18 +80,14 @@ public class ServiceDaoImplementation implements ServiceDao {
     }
 
     private Service buildService(ResultSet resultSet) throws SQLException {
-        if(resultSet.next()){
-            BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-            String name = resultSet.getString("name");
-            Double price = resultSet.getDouble("price");
-            String description = resultSet.getString("description");
-            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
-            Service service = new Service(serviceId, name, price, description, isDeleted);
+        BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
+        String name = resultSet.getString("name");
+        Double price = resultSet.getDouble("price");
+        String description = resultSet.getString("description");
+        Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+        Service service = new Service(serviceId, name, price, description, isDeleted);
 
-            return service;
-        } else {
-            throw new SQLException("Service not found");
-        }
+        return service;
     }
 
     private Collection<Service> buildServiceList(ResultSet resultSet) throws SQLException {

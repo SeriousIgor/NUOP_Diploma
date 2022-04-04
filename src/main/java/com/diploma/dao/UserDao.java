@@ -9,9 +9,11 @@ import java.util.Collection;
 public interface UserDao {
     User getUser(BigInteger userId) throws SQLException;
 
+    User getUser(String userName) throws SQLException;
+
     User getUser(String userName, String password) throws SQLException;
 
-    Collection<User> getUsers(String userName) throws SQLException;
+    Collection<User> getUsers(String name) throws SQLException;
 
     Collection<User> getUsers() throws SQLException;
 
@@ -23,11 +25,13 @@ public interface UserDao {
 
     String GET_USER = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE userId = ";
 
+    String GET_USER_BY_USERNAME = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE username like ";
+
     String GET_USER_BY_USERNAME_AND_PASSWORD = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE username like '";
 
     String GET_USERS = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE isDeleted = 0";
 
-    String GET_USERS_BY_USERNAME = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE isDeleted = 0 AND username like '";
+    String GET_USERS_BY_NAME = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE isDeleted = 0 AND (firstName like ";
 
     String CREATE_USER = "INSERT INTO User (username, firstName, lastName, password) VALUES (";
 

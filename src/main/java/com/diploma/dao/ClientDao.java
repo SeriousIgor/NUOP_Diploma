@@ -23,7 +23,7 @@ public interface ClientDao {
 
     String GET_CLIENTS = "SELECT clientId, firstName, lastName, phoneNumber, isDeleted FROM Client WHERE isDeleted = 0";
 
-    String GET_CLIENTS_BY_NAME = "SELECT clientId, firstName, lastName, phoneNumber, isDeleted FROM Client WHERE (isDeleted = 0) AND ";
+    String GET_CLIENTS_BY_NAME = "SELECT clientId, firstName, lastName, phoneNumber, isDeleted FROM Client WHERE (isDeleted = 0) AND (firstname like ";
 
     String CREATE_CLIENT = "INSERT INTO Client (firstName, lastName, phoneNumber) VALUES (";
 

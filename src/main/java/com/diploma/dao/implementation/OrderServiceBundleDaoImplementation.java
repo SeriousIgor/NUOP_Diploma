@@ -1,9 +1,7 @@
 package com.diploma.dao.implementation;
 
 import com.diploma.dao.OrderServiceBundleDao;
-import com.diploma.models.Order;
 import com.diploma.models.OrderServiceBundle;
-import com.diploma.models.Service;
 
 import java.math.BigInteger;
 import java.sql.*;
@@ -19,10 +17,19 @@ public class OrderServiceBundleDaoImplementation implements OrderServiceBundleDa
         this.stm = stm;
     }
 
+    public OrderServiceBundleDaoImplementation() throws SQLException {
+        connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/OrderAccounting.db");
+        stm = connection.createStatement();
+    }
+
     @Override
     public OrderServiceBundle getOrderServiceBundle(BigInteger orderServiceBundleId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderServiceBundleDao.GET_ORDERSERVICEBUNDLE + orderServiceBundleId);
-        return buildOrderServiceBundle(resultSet);
+        if(resultSet.next()){
+            return buildOrderServiceBundle(resultSet);
+        } else {
+            throw new SQLException("OrderServiceBundle not found");
+        }
     }
 
     @Override
@@ -72,16 +79,13 @@ public class OrderServiceBundleDaoImplementation implements OrderServiceBundleDa
     }
 
     private OrderServiceBundle buildOrderServiceBundle(ResultSet resultSet) throws SQLException {
-        if(resultSet.next()){
-            BigInteger orderServiceBundleId = BigInteger.valueOf(resultSet.getInt("orderServiceBundleId"));
-            BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
-            BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
-            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
-            OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId, isDeleted);
-            return orderServiceBundle;
-        } else {
-            throw new SQLException("OrderServiceBundle not found");
-        }
+        BigInteger orderServiceBundleId = BigInteger.valueOf(resultSet.getInt("orderServiceBundleId"));
+        BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
+        BigInteger serviceId = BigInteger.valueOf(resultSet.getInt("serviceId"));
+        Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+        OrderServiceBundle orderServiceBundle = new OrderServiceBundle(orderServiceBundleId, orderId, serviceId, isDeleted);
+
+        return orderServiceBundle;
     }
 
     private Collection<OrderServiceBundle> buildOrderServiceBundleList(ResultSet resultSet) throws SQLException {

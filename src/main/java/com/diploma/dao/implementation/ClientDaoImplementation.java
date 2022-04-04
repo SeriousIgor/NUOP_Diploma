@@ -25,7 +25,11 @@ public class ClientDaoImplementation implements ClientDao {
     @Override
     public Client getClient(BigInteger clientId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(ClientDao.GET_CLIENT + clientId);
-        return buildClient(resultSet);
+        if (resultSet.next()) {
+            return buildClient(resultSet);
+        } else {
+            throw new SQLException("Client not found");
+        }
     }
 
     @Override
@@ -36,8 +40,8 @@ public class ClientDaoImplementation implements ClientDao {
 
     @Override
     public Collection<Client> getClients(String name) throws SQLException {
-        String partOfQuery = String.join(name.toLowerCase(), "(firstName like '%", "%' OR lastName like '%", "%')");
-        ResultSet resultSet = stm.executeQuery(ClientDao.GET_CLIENTS_BY_NAME + partOfQuery);
+        String query = ClientDao.GET_CLIENTS_BY_NAME + "'%" + name + "%' OR lastName like '%" + name + "%')";
+        ResultSet resultSet = stm.executeQuery(query);
         return buildClientList(resultSet);
     }
 
@@ -62,17 +66,14 @@ public class ClientDaoImplementation implements ClientDao {
     }
 
     private Client buildClient(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()) {
-            BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String phoneNumber = resultSet.getString("phoneNumber");
-            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
-            Client client = new Client(clientId, firstName, lastName, phoneNumber, isDeleted);
-            return client;
-        } else {
-            throw new SQLException("No records found");
-        }
+        BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
+        String firstName = resultSet.getString("firstName");
+        String lastName = resultSet.getString("lastName");
+        String phoneNumber = resultSet.getString("phoneNumber");
+        Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+        Client client = new Client(clientId, firstName, lastName, phoneNumber, isDeleted);
+
+        return client;
     }
 
     private Collection<Client> buildClientList(ResultSet resultSet) throws SQLException {
@@ -83,7 +84,7 @@ public class ClientDaoImplementation implements ClientDao {
             } while (resultSet.next());
             return clientList;
         } else {
-            throw new SQLException("No records found");
+            throw new SQLException("Clients not found");
         }
     }
 }

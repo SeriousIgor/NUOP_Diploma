@@ -26,7 +26,11 @@ public class CardDaoImplementation implements CardDao {
     @Override
     public Card getCard(BigInteger cardId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(CardDao.GET_CARD + cardId);
-        return buildCard(resultSet);
+        if(resultSet.next()){
+            return buildCard(resultSet);
+        } else {
+            throw new SQLException("Cards not found");
+        }
     }
 
     @Override
@@ -64,7 +68,6 @@ public class CardDaoImplementation implements CardDao {
     }
 
     private Card buildCard(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()){
             BigInteger clientId = BigInteger.valueOf(resultSet.getInt("clientId"));
             String firstName = resultSet.getString("firstName");
             String lastName = resultSet.getString("lastName");
@@ -80,9 +83,6 @@ public class CardDaoImplementation implements CardDao {
             Card card = new Card(cardId, client, isDiscount, discountPercentage, bonuses, cardIsDeleted);
 
             return card;
-        } else {
-            throw new SQLException("No records found");
-        }
     }
 
     private Collection<Card> buildCardList(ResultSet resultSet) throws SQLException {
@@ -93,7 +93,7 @@ public class CardDaoImplementation implements CardDao {
         } while(resultSet.next());
             return cardList;
         } else {
-            throw new SQLException("No records found");
+            throw new SQLException("Cards not found");
         }
     }
 }

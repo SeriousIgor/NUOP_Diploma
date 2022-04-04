@@ -17,32 +17,74 @@ public class OrderDaoImplementation implements OrderDao {
     public OrderDaoImplementation() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/OrderAccounting.db");
         stm = connection.createStatement();
-        osbdi = new OrderServiceBundleDaoImplementation(connection, stm);
-        sdi = new ServiceDaoImplementation(connection, stm);
+        osbdi = new OrderServiceBundleDaoImplementation();
+        sdi = new ServiceDaoImplementation();
     }
 
     public OrderDaoImplementation(Connection connection, Statement stm) throws SQLException {
         this.connection = connection;
         this.stm = stm;
-        osbdi = new OrderServiceBundleDaoImplementation(connection, stm);
-        sdi = new ServiceDaoImplementation(connection, stm);
+        this.osbdi = new OrderServiceBundleDaoImplementation(connection, stm);
+        this.sdi = new ServiceDaoImplementation(connection, stm);
     }
     @Override
     public Order getOrder(BigInteger orderId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderDao.GET_ORDER + orderId);
-        return buildOrder(resultSet);
+        if(resultSet.next()){
+            return buildOrder(resultSet);
+        } else {
+            throw new SQLException("Order not found");
+        }
     }
 
     @Override
     public Order getOrder(Timestamp orderDate) throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderDao.GET_ORDER_BY_DATE + "'" + orderDate + "'");
-        return buildOrder(resultSet);
+        if(resultSet.next()){
+            BigInteger clientId = BigInteger.valueOf(resultSet.getInt("client.clientId"));
+            String clientFirstName = resultSet.getString("client.firstName");
+            String clientLastName = resultSet.getString("client.lastName");
+            String clientPhoneNumber = resultSet.getString("client.phoneNumber");
+            Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
+            Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, clientIsDeleted);
+
+            BigInteger userId = BigInteger.valueOf(resultSet.getInt("user.userID"));
+            String userUsername = resultSet.getString("user.username");
+            String userFirstName = resultSet.getString("user.firstName");
+            String userLastName = resultSet.getString("user.lastName");
+            String userPassword = resultSet.getString("user.password");
+            Boolean userIsAdmin = resultSet.getInt("user.isAdmin") == 1;
+            Boolean userIsDeleted = resultSet.getInt("user.isDeleted") == 1;
+            User user = new User(userId, userUsername, userFirstName, userLastName, userPassword, userIsAdmin, userIsDeleted);
+
+            BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
+            String name = resultSet.getString("name");
+            OrderStatus status = OrderStatus.valueOf(resultSet.getString("status"));
+            Double price = resultSet.getDouble("price");
+            String description = resultSet.getString("description");
+            Boolean orderIsDeleted = resultSet.getInt("isDeleted") == 1;
+
+
+            Order order = new Order(orderId, name, status, price, description, orderDate, user, client, null, orderIsDeleted);
+
+            return order;
+        } else {
+            throw new SQLException("Order not found");
+        }
     }
 
     @Override
     public Collection<Order> getOrders() throws SQLException {
         ResultSet resultSet = stm.executeQuery(OrderDao.GET_ORDERS);
-        return buildOrderList(resultSet);
+        Collection<Order> orderList = new ArrayList<>();
+        while (resultSet.next()){
+            orderList.add(buildOrder(resultSet));
+        }
+        if(!orderList.isEmpty()) {
+            return orderList;
+        } else {
+            throw new SQLException("Orders not found");
+        }
     }
 
     @Override
@@ -135,51 +177,48 @@ public class OrderDaoImplementation implements OrderDao {
     }
 
     private Order buildOrder(ResultSet resultSet) throws SQLException {
-        if(resultSet.next()){
-            BigInteger clientId = BigInteger.valueOf(resultSet.getInt("client.clientId"));
-            String clientFirstName = resultSet.getString("client.firstName");
-            String clientLastName = resultSet.getString("client.lastName");
-            String clientPhoneNumber = resultSet.getString("client.phoneNumber");
-            Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
-            Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, clientIsDeleted);
+        BigInteger clientId = BigInteger.valueOf(resultSet.getInt("client.clientId"));
+        String clientFirstName = resultSet.getString("client.firstName");
+        String clientLastName = resultSet.getString("client.lastName");
+        String clientPhoneNumber = resultSet.getString("client.phoneNumber");
+        Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
+        Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, clientIsDeleted);
 
-            BigInteger userId = BigInteger.valueOf(resultSet.getInt("user.userID"));
-            String userUsername = resultSet.getString("user.username");
-            String userFirstName = resultSet.getString("user.firstName");
-            String userLastName = resultSet.getString("user.lastName");
-            String userPassword = resultSet.getString("user.password");
-            Boolean userIsAdmin = resultSet.getInt("user.isAdmin") == 1;
-            Boolean userIsDeleted = resultSet.getInt("user.isDeleted") == 1;
-            User user = new User(userId, userUsername, userFirstName, userLastName, userPassword, userIsAdmin, userIsDeleted);
+        BigInteger userId = BigInteger.valueOf(resultSet.getInt("user.userID"));
+        String userUsername = resultSet.getString("user.username");
+        String userFirstName = resultSet.getString("user.firstName");
+        String userLastName = resultSet.getString("user.lastName");
+        String userPassword = resultSet.getString("user.password");
+        Boolean userIsAdmin = resultSet.getInt("user.isAdmin") == 1;
+        Boolean userIsDeleted = resultSet.getInt("user.isDeleted") == 1;
+        User user = new User(userId, userUsername, userFirstName, userLastName, userPassword, userIsAdmin, userIsDeleted);
 
-            BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
-            String name = resultSet.getString("name");
-            OrderStatus status = OrderStatus.valueOf(resultSet.getString("status"));
-            Double price = resultSet.getDouble("price");
-            String description = resultSet.getString("description");
-            Timestamp orderDate = resultSet.getTimestamp("orderDate");
-            Boolean orderIsDeleted = resultSet.getInt("isDeleted") == 1;
+        BigInteger orderId = BigInteger.valueOf(resultSet.getInt("orderId"));
+        String name = resultSet.getString("name");
+        OrderStatus status = OrderStatus.valueOf(resultSet.getString("status"));
+        Double price = resultSet.getDouble("price");
+        String description = resultSet.getString("description");
+        Timestamp orderDate = resultSet.getTimestamp("orderDate");
+        Boolean orderIsDeleted = resultSet.getInt("isDeleted") == 1;
 
-            Collection<OrderServiceBundle> osbList = osbdi.getOrderServiceBundles(orderId);
-            Collection<Service> services = new ArrayList<Service>();
-            for(OrderServiceBundle osb : osbList){
-                Service service = sdi.getService(osb.getServiceId());
-                services.add(service);
-            }
-
-            Order order = new Order(orderId, name, status, price, description, orderDate, user, client, services, orderIsDeleted);
-            return order;
-        } else {
-            throw new SQLException("Order not found");
+        Collection<OrderServiceBundle> osbList = osbdi.getOrderServiceBundles(orderId);
+        Collection<Service> services = new ArrayList<Service>();
+        for(OrderServiceBundle osb : osbList){
+            Service service = sdi.getService(osb.getServiceId());
+            services.add(service);
         }
+
+        Order order = new Order(orderId, name, status, price, description, orderDate, user, client, services, orderIsDeleted);
+
+        return order;
     }
 
     private Collection<Order> buildOrderList(ResultSet resultSet) throws SQLException {
         Collection<Order> orderList = new ArrayList<>();
-        if(resultSet.next()){
-            do {
-                orderList.add(buildOrder(resultSet));
-            } while (resultSet.next());
+        while (resultSet.next()){
+            orderList.add(buildOrder(resultSet));
+        }
+        if(!orderList.isEmpty()) {
             return orderList;
         } else {
             throw new SQLException("Orders not found");

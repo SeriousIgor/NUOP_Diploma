@@ -31,11 +31,7 @@ public class WorkLogDaoImplementation implements WorkLogDao {
         ResultSet resultSet = stm.executeQuery(WorkLogDao.GET_WORKLOG + workLogId);
         WorkLog workLog = null;
         if(resultSet.next()){
-            BigInteger userId = BigInteger.valueOf(resultSet.getInt("userId"));
-            WorkLogAction action = WorkLogAction.valueOf(resultSet.getString("action"));
-            Timestamp logDate = resultSet.getTimestamp("logDate");
-            workLog = new WorkLog(workLogId, userId, action, logDate);
-            return workLog;
+            return buildWorkLog(resultSet);
         } else {
             throw new SQLException("WorkLog not found");
         }
@@ -44,38 +40,13 @@ public class WorkLogDaoImplementation implements WorkLogDao {
     @Override
     public Collection<WorkLog> getWorkLogs() throws SQLException {
         ResultSet resultSet = stm.executeQuery(WorkLogDao.GET_WORKLOGS);
-        Collection<WorkLog> workLogs = new ArrayList<WorkLog>();
-        if(resultSet.next()){
-            do {
-                BigInteger workLogId = BigInteger.valueOf(resultSet.getInt("workLogId"));
-                BigInteger userId = BigInteger.valueOf(resultSet.getInt("userId"));
-                WorkLogAction action = WorkLogAction.valueOf(resultSet.getString("action"));
-                Timestamp logDate = resultSet.getTimestamp("logDate");
-                WorkLog workLog = new WorkLog(workLogId, userId, action, logDate);
-                workLogs.add(workLog);
-            } while (resultSet.next());
-            return workLogs;
-        } else {
-            throw new SQLException("WorkLogs not found");
-        }
+        return buildWorkLogList(resultSet);
     }
 
     @Override
     public Collection<WorkLog> getWorkLogs(BigInteger userId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(WorkLogDao.GET_WORKLOGS_BY_USER + userId);
-        Collection<WorkLog> workLogs = new ArrayList<WorkLog>();
-        if(resultSet.next()){
-            do {
-                BigInteger workLogId = BigInteger.valueOf(resultSet.getInt("workLogId"));
-                WorkLogAction action = WorkLogAction.valueOf(resultSet.getString("action"));
-                Timestamp logDate = resultSet.getTimestamp("logDate");
-                WorkLog workLog = new WorkLog(workLogId, userId, action, logDate);
-                workLogs.add(workLog);
-            } while (resultSet.next());
-            return workLogs;
-        } else {
-            throw new SQLException("WorkLogs not found");
-        }
+        return buildWorkLogList(resultSet);
     }
 
     @Override
@@ -87,26 +58,36 @@ public class WorkLogDaoImplementation implements WorkLogDao {
             maxDate = new Timestamp(new java.util.Date().getTime());
         }
         ResultSet resultSet = stm.executeQuery(WorkLogDao.GET_WORKLOGS_BY_LOGDATE + minDate + "' AND logDate <= '" + maxDate + "'");
+        return buildWorkLogList(resultSet);
+    }
+
+    @Override
+    public Boolean createWorkLog(WorkLog workLog) throws SQLException {
+        Timestamp logDate = new Timestamp(new java.util.Date().getTime());
+        String query = WorkLogDao.CREATE_WORKLOG + workLog.getUserId() + ", '" + workLog.getAction() + "', '" + logDate + "')";
+        Boolean result = stm.executeUpdate(query) == 1;
+        return result;
+    }
+
+    private WorkLog buildWorkLog(ResultSet resultSet) throws SQLException {
+        BigInteger workLogId = BigInteger.valueOf(resultSet.getInt("workLogId"));
+        BigInteger userId = BigInteger.valueOf(resultSet.getInt("userId"));
+        WorkLogAction action = WorkLogAction.valueOf(resultSet.getString("action"));
+        Timestamp logDate = resultSet.getTimestamp("logDate");
+        WorkLog workLog = new WorkLog(workLogId, userId, action, logDate);
+
+        return workLog;
+    }
+
+    private Collection<WorkLog> buildWorkLogList(ResultSet resultSet) throws SQLException {
         Collection<WorkLog> workLogs = new ArrayList<WorkLog>();
         if(resultSet.next()){
             do {
-                BigInteger workLogId = BigInteger.valueOf(resultSet.getInt("workLogId"));
-                BigInteger userId = BigInteger.valueOf(resultSet.getInt("userId"));
-                WorkLogAction action = WorkLogAction.valueOf(resultSet.getString("action"));
-                Timestamp logDate = resultSet.getTimestamp("logDate");
-                WorkLog workLog = new WorkLog(workLogId, userId, action, logDate);
-                workLogs.add(workLog);
+                workLogs.add(buildWorkLog(resultSet));
             } while (resultSet.next());
             return workLogs;
         } else {
             throw new SQLException("WorkLogs not found");
         }
-    }
-
-    @Override
-    public Boolean createWorkLog(WorkLog workLog) throws SQLException {
-        String query = WorkLogDao.CREATE_WORKLOG + workLog.getUserId() + ", '" + workLog.getAction() + "', '" + workLog.getLogDate() + "')";
-        Boolean result = stm.executeUpdate(query) == 1;
-        return result;
     }
 }

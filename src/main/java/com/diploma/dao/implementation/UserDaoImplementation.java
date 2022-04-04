@@ -26,13 +26,31 @@ public class UserDaoImplementation implements UserDao {
     @Override
     public User getUser(BigInteger userId) throws SQLException {
         ResultSet resultSet = stm.executeQuery(UserDao.GET_USER + userId);
-        return buildUser(resultSet);
+        if(resultSet.next()){
+            return buildUser(resultSet);
+        } else {
+            throw new SQLException("No records found");
+        }
+    }
+
+    @Override
+    public User getUser(String userName) throws SQLException {
+        ResultSet resultSet = stm.executeQuery(UserDao.GET_USER_BY_USERNAME + "'" + userName + "'");
+        if(resultSet.next()){
+            return buildUser(resultSet);
+        } else {
+            throw new SQLException("No records found");
+        }
     }
 
     @Override
     public User getUser(String userName, String password) throws SQLException {
         ResultSet resultSet = stm.executeQuery(UserDao.GET_USER_BY_USERNAME_AND_PASSWORD + userName + "' AND password = '" + password + "'");
-        return buildUser(resultSet);
+        if(resultSet.next()){
+            return buildUser(resultSet);
+        } else {
+            throw new SQLException("No records found");
+        }
     }
 
     @Override
@@ -42,9 +60,9 @@ public class UserDaoImplementation implements UserDao {
     }
 
     @Override
-    public Collection<User> getUsers(String userName) throws SQLException {
-        userName = "%" + userName + "%'";
-        ResultSet resultSet = stm.executeQuery(UserDao.GET_USERS_BY_USERNAME + userName);
+    public Collection<User> getUsers(String name) throws SQLException {
+        String query = UserDao.GET_USERS_BY_NAME + "'%" + name + "%' OR lastName like '%" + name + "%')";
+        ResultSet resultSet = stm.executeQuery(query);
         return buildUserList(resultSet);
     }
 
@@ -71,19 +89,16 @@ public class UserDaoImplementation implements UserDao {
     }
 
     private User buildUser(ResultSet resultSet) throws SQLException {
-        if(resultSet.next()){
-            BigInteger userId = BigInteger.valueOf(resultSet.getInt("userId"));
-            String username = resultSet.getString("username");
-            String firstName = resultSet.getString("firstName");
-            String lastName = resultSet.getString("lastName");
-            String password = resultSet.getString("password");
-            Boolean isAdmin = resultSet.getInt("isAdmin") == 1;
-            Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
-            User user = new User(userId, username, firstName, lastName, password, isAdmin, isDeleted);
-            return user;
-        } else {
-            throw new SQLException("No records found");
-        }
+        BigInteger userId = BigInteger.valueOf(resultSet.getInt("userId"));
+        String username = resultSet.getString("username");
+        String firstName = resultSet.getString("firstName");
+        String lastName = resultSet.getString("lastName");
+        String password = resultSet.getString("password");
+        Boolean isAdmin = resultSet.getInt("isAdmin") == 1;
+        Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
+        User user = new User(userId, username, firstName, lastName, password, isAdmin, isDeleted);
+
+        return user;
     }
 
     private Collection<User> buildUserList(ResultSet resultSet) throws SQLException {
@@ -95,7 +110,7 @@ public class UserDaoImplementation implements UserDao {
 
             return userList;
         } else {
-            throw new SQLException("No records found");
+            throw new SQLException("Users not found");
         }
     }
 }
