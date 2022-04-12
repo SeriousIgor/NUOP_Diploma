@@ -43,19 +43,27 @@ public class Card {
         isDiscount = discount;
     }
 
-    public int getDiscountPercentage() {
+    public Integer getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDiscountPercentage(int discountPercentage) {
+    public void setDiscountPercentage(Integer discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
 
-    public double getBonuses() {
+    public Double getBonuses() {
         return bonuses;
     }
 
-    public void setBonuses(double bonuses) {
+    public void setBonuses(Double bonuses) {
         this.bonuses = bonuses;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

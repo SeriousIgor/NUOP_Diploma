@@ -48,4 +48,12 @@ public class Service {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

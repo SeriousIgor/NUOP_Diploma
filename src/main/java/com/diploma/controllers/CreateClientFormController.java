@@ -4,11 +4,16 @@ import com.diploma.dao.implementation.ClientDaoImplementation;
 import com.diploma.helpers.FormHelper;
 import com.diploma.models.Client;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class CreateClientFormController {
+
+    @FXML
+    private Pane clientPane;
 
     @FXML
     private TextField phoneNumberField;
@@ -25,11 +30,14 @@ public class CreateClientFormController {
     @FXML
     private Button cancelButton;
 
+    private FormHelper fh;
+
     @FXML
     protected void onOKButtonClick() throws Exception{
-        if(createClient()){
+        if(fh.validateFields(clientPane) && createClient()){
             Stage stage = (Stage) okButton.getScene().getWindow();
             stage.close();
+            fh.getScene("/forms/main-menu-form.fxml");
         }
     }
 
@@ -37,6 +45,12 @@ public class CreateClientFormController {
     protected void onCancelButtonClick(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+        fh.getScene("/forms/main-menu-form.fxml");
+    }
+
+    @FXML
+    void initialize() {
+        fh = new FormHelper();
     }
 
     private boolean createClient() throws Exception {
@@ -45,8 +59,9 @@ public class CreateClientFormController {
             ClientDaoImplementation cdi = new ClientDaoImplementation();
             return cdi.createCliend(client);
         } catch (Exception ex){
-            FormHelper.errorMessage = ex.getMessage();
-            FormHelper.displayMessageBox();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(ex.getMessage());
+            alert.show();
             return false;
         }
     }

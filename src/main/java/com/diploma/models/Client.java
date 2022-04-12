@@ -6,14 +6,14 @@ public class Client {
     private BigInteger clientId;
     private String firstName;
     private String lastName;
-    private String phoneNubmer;
+    private String phoneNumber;
     private boolean isDeleted;
 
-    public Client(BigInteger clientId, String firstName, String lastName, String phoneNubmer, boolean isDeleted) {
+    public Client(BigInteger clientId, String firstName, String lastName, String phoneNumber, boolean isDeleted) {
         this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNubmer = phoneNubmer;
+        this.phoneNumber = phoneNumber;
         this.isDeleted = isDeleted;
     }
 
@@ -41,11 +41,19 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getPhoneNubmer() {
-        return phoneNubmer;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneNubmer(String phoneNubmer) {
-        this.phoneNubmer = phoneNubmer;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

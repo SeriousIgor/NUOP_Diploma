@@ -102,4 +102,12 @@ public class Order {
     public void setServices(Collection<Service> services) {
         this.services = services;
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

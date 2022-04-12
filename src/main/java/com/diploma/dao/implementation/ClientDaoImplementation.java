@@ -47,14 +47,14 @@ public class ClientDaoImplementation implements ClientDao {
 
     @Override
     public Boolean createCliend(Client client) throws SQLException {
-        String query = ClientDao.CREATE_CLIENT + "'" + client.getFirstName() + "', '" + client.getLastName() + "', '" + client.getPhoneNubmer() + "')";
+        String query = ClientDao.CREATE_CLIENT + "'" + client.getFirstName() + "', '" + client.getLastName() + "', '" + client.getPhoneNumber() + "')";
         Boolean result = stm.executeUpdate(query) == 1;
         return result;
     }
 
     @Override
     public Boolean updateClient(Client client) throws SQLException {
-        String query = ClientDao.UPDATE_CLIENT + "firstName = '" + client.getFirstName() + "', lastName = '" + client.getLastName() + "', phoneNumber = '" + client.getPhoneNubmer() + "' WHERE clientId = " + client.getClientId();
+        String query = ClientDao.UPDATE_CLIENT + "firstName = '" + client.getFirstName() + "', lastName = '" + client.getLastName() + "', phoneNumber = '" + client.getPhoneNumber() + "' WHERE clientId = " + client.getClientId();
         Boolean result = stm.executeUpdate(query) == 1;
         return result;
     }
