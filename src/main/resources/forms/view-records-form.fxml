@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewRecordsFormController">
+   <children>
+      <Pane fx:id="viewAllRecordsPane" layoutX="200.0" layoutY="100.0" prefHeight="400.0" prefWidth="600.0" />
+      <Button fx:id="clientsButton" layoutX="14.0" layoutY="134.0" mnemonicParsing="false" onAction="#onClientsButton" prefHeight="75.0" prefWidth="175.0" text="Clients" />
+      <Button fx:id="cardsButton" layoutX="14.0" layoutY="225.0" mnemonicParsing="false" onAction="#onCardsButton" prefHeight="75.0" prefWidth="175.0" text="Cards" />
+      <Button fx:id="ordersButton" layoutX="14.0" layoutY="314.0" mnemonicParsing="false" onAction="#onOrdersButton" prefHeight="75.0" prefWidth="175.0" text="Orders" />
+      <Button fx:id="servicesButton" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" onAction="#onServicesButtonClick" prefHeight="75.0" prefWidth="175.0" text="Services" />
+      <Button fx:id="createButtonClick" layoutX="611.0" layoutY="14.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="175.0" text="Create" />
+      <Button fx:id="backButton" layoutX="14.0" layoutY="39.0" mnemonicParsing="false" onAction="#onBackButtonClick" text="Back" />
+   </children>
+</Pane>

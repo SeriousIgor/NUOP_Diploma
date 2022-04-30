@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="168.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.MainMenuFormController">
+   <children>
+      <Button fx:id="viewRecordsButton" layoutX="41.0" layoutY="29.0" mnemonicParsing="false" onAction="#onViewRecordsButtonClick" text="View Records" />
+      <Button fx:id="worklogRaportsButton" layoutX="31.0" layoutY="93.0" mnemonicParsing="false" onAction="#onWorklogRaportsButtonClick" text="Worklog Raports" />
+   </children>
+</Pane>
