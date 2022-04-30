@@ -37,7 +37,7 @@ public class CreateClientFormController {
         if(fh.validateFields(clientPane) && createClient()){
             Stage stage = (Stage) okButton.getScene().getWindow();
             stage.close();
-            fh.getScene("/forms/main-menu-form.fxml");
+            fh.getScene("/forms/view-records-form.fxml");
         }
     }
 
@@ -45,7 +45,7 @@ public class CreateClientFormController {
     protected void onCancelButtonClick(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-        fh.getScene("/forms/main-menu-form.fxml");
+        fh.getScene("/forms/view-records-form.fxml");
     }
 
     @FXML

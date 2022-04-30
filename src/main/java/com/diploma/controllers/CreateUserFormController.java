@@ -4,11 +4,16 @@ import com.diploma.dao.implementation.UserDaoImplementation;
 import com.diploma.helpers.FormHelper;
 import com.diploma.models.User;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class CreateUserFormController {
+
+    @FXML
+    private Pane userPane;
 
     @FXML
     private TextField userNameField;
@@ -28,9 +33,11 @@ public class CreateUserFormController {
     @FXML
     private Button cancelButton;
 
+    private FormHelper fh;
+
     @FXML
     protected void onOKButtonClick() throws Exception {
-        if(createUser()){
+        if(fh.validateFields(userPane) && createUser()){
             Stage stage = (Stage) okButton.getScene().getWindow();
             stage.close();
         }
@@ -42,22 +49,23 @@ public class CreateUserFormController {
         stage.close();
     }
 
+    @FXML
+    void initialize() {
+        this.fh = new FormHelper();
+    }
+
     private boolean createUser() throws Exception {
         try{
-            if(userNameField.getText().isBlank() || firstNameField.getText().isBlank() || lastNameField.getText().isBlank() || passwordField.getText().isBlank()){
-                throw new Exception("Fill all User fields");
-            }
             UserDaoImplementation udi = new UserDaoImplementation();
             User newUser = new User(null, userNameField.getText(), firstNameField.getText(), lastNameField.getText(), passwordField.getText(), udi.getUsers().isEmpty(), false);
             return udi.createUser(newUser);
         } catch (Exception ex){
-            FormHelper.errorMessage = ex.getMessage();
-            FormHelper.displayMessageBox();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(ex.getMessage());
+            alert.show();
             return false;
         }
     }
 
-    private void closeStage(){
 
-    }
 }

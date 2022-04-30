@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -30,12 +32,26 @@ public class LoginWindowController {
     private TextField password;
 
     @FXML
+    private Button submitButton;
+
+    private FormHelper fh;
+
+    @FXML
     protected void onSubmitButtonClick(ActionEvent event) throws Exception {
         if(checkUser(userName.getText(), password.getText())){
-            testLabel.setText("OK");
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
+            fh.getScene("/forms/main-menu-form.fxml");
         } else {
-            testLabel.setText("Not OK");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Wrong Username or Password");
+            alert.show();
         }
+    }
+
+    @FXML
+    void initialize(){
+        this.fh = new FormHelper();
     }
 
     private boolean checkUser(String userName, String password) throws Exception {
@@ -46,9 +62,10 @@ public class LoginWindowController {
             User user = udi.getUser(userName, password);
 
             return user != null;
-        } catch (Exception e) {
-            FormHelper.errorMessage = e.getMessage();
-            FormHelper.displayMessageBox();
+        } catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(ex.getMessage());
+            alert.show();
             return false;
         }
     }

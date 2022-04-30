@@ -23,14 +23,6 @@ public class FormHelper {
         return primaryStage;
     }
 
-    public static void displayMessageBox() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/forms/message-box.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-    }
-
     public String startPrimaryForm(String path, String title){
         try {
             Parent root = FXMLLoader.load(getClass().getResource(path));

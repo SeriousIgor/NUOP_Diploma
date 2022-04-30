@@ -1,37 +1,45 @@
 package com.diploma.controllers;
 
-import com.diploma.dao.implementation.ClientDaoImplementation;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import com.diploma.helpers.FormHelper;
-import com.diploma.models.Client;
-import com.diploma.models.Service;
-import com.diploma.nuop_diploma.HelloApplication;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
-import java.io.IOException;
 public class MainMenuFormController {
-    @FXML
-    private Button createOrderButton;
 
     @FXML
-    private Button createClientButton;
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
+    @FXML
+    private Button viewRecordsButton;
+
+    @FXML
+    private Button worklogRaportsButton;
 
     private FormHelper fh;
 
     @FXML
-    protected void onCreateClientButtonClick() throws IOException {
-        fh.getScene("/forms/create-client-form.fxml");
-
+    void onViewRecordsButtonClick(ActionEvent event) {
+        Stage stage = (Stage) viewRecordsButton.getScene().getWindow();
+        stage.close();
+        fh.getScene("/forms/view-records-form.fxml");
     }
 
     @FXML
-    protected void onCreateOrderButtonClick(){
-        fh.getScene("/forms/create-order-form.fxml");
+    void onWorklogRaportsButtonClick(ActionEvent event) {
+
     }
 
     @FXML
     void initialize() {
         fh = new FormHelper();
     }
+
 }

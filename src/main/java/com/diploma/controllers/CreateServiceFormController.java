@@ -4,6 +4,7 @@ import com.diploma.dao.implementation.ServiceDaoImplementation;
 import com.diploma.helpers.FormHelper;
 import com.diploma.models.Service;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -51,8 +52,9 @@ public class CreateServiceFormController {
             ServiceDaoImplementation sdi = new ServiceDaoImplementation();
             return sdi.createService(service);
         } catch (Exception ex){
-            FormHelper.errorMessage = ex.getMessage();
-            FormHelper.displayMessageBox();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(ex.getMessage());
+            alert.show();
             return false;
         }
     }
