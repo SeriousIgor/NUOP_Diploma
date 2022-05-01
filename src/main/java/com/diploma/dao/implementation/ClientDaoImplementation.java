@@ -17,9 +17,9 @@ public class ClientDaoImplementation implements ClientDao {
         stm = connection.createStatement();
     }
 
-    public ClientDaoImplementation(Connection connection, Statement stm) throws SQLException {
+    public ClientDaoImplementation(Connection connection) throws SQLException {
         this.connection = connection;
-        this.stm = stm;
+        this.stm = connection.createStatement();
     }
 
     @Override

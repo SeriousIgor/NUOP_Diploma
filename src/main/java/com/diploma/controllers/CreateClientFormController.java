@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class CreateClientFormController {
 
     @FXML
@@ -32,6 +34,8 @@ public class CreateClientFormController {
 
     private FormHelper fh;
 
+    private ClientDaoImplementation cldi;
+
     @FXML
     protected void onOKButtonClick() throws Exception{
         if(fh.validateFields(clientPane) && createClient()){
@@ -49,18 +53,19 @@ public class CreateClientFormController {
     }
 
     @FXML
-    void initialize() {
-        fh = new FormHelper();
+    void initialize() throws SQLException {
+        this.fh = new FormHelper();
+        this.cldi = new ClientDaoImplementation(FormHelper.connection);
     }
 
     private boolean createClient() throws Exception {
         try{
             Client client = new Client(null, firstNameField.getText(), lastNameField.getText(), phoneNumberField.getText(), false);
-            ClientDaoImplementation cdi = new ClientDaoImplementation();
-            return cdi.createCliend(client);
+            return cldi.createCliend(client);
         } catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(ex.getMessage());
+            alert.setHeaderText(null);
             alert.show();
             return false;
         }

@@ -28,7 +28,7 @@ public class ViewRecordsFormController {
     private Button clientsButton;
 
     @FXML
-    private Button createButtonClick;
+    private Button createButton;
 
     @FXML
     private Button ordersButton;
@@ -37,7 +37,13 @@ public class ViewRecordsFormController {
     private Button servicesButton;
 
     @FXML
+    private Button usersButton;
+
+    @FXML
     private Pane viewAllRecordsPane;
+
+    @FXML
+    private Button workLogsButton;
 
     private FormHelper fh;
 
@@ -49,8 +55,43 @@ public class ViewRecordsFormController {
     }
 
     @FXML
+    void onCardsButton(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onClientsButton(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onCreateButtonClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onOrdersButton(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onServicesButtonClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onUsersButtonClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onWorkLogsButtonClick(ActionEvent event) {
+
+    }
+
+    @FXML
     void initialize() {
-        fh = new FormHelper();
+        this.fh = new FormHelper();
     }
 
 }

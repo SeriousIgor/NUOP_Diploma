@@ -15,5 +15,6 @@
       <Label layoutX="267.0" layoutY="28.0" text="Phone Number" />
       <Button fx:id="cancelButton" layoutX="267.0" layoutY="181.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
       <Button fx:id="okButton" layoutX="383.0" layoutY="181.0" mnemonicParsing="false" onAction="#onOKButtonClick" text="OK" />
+      <Button fx:id="deleteRecordButton" layoutX="37.0" layoutY="181.0" mnemonicParsing="false" onAction="#onDeleteRecordButtonClick" text="Delete Record" />
    </children>
 </Pane>

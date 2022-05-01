@@ -29,6 +29,8 @@ public class CreateServiceFormController {
     @FXML
     private Button cancelButton;
 
+    private FormHelper fh;
+
     @FXML
     protected void onOKButtonClick() throws Exception{
         if(createService()){
@@ -45,7 +47,7 @@ public class CreateServiceFormController {
 
     private boolean createService() throws Exception{
         try{
-            if(!validateNumber(priceField.getText())){
+            if(!fh.validateNumber(priceField.getText())){
                 throw new Exception("Only numbers allowed");
             }
             Service service = new Service(null, nameField.getText(), Double.valueOf(priceField.getText()), descriptionField.getText(), false);
@@ -59,8 +61,5 @@ public class CreateServiceFormController {
         }
     }
 
-    private boolean validateNumber(String text)
-    {
-        return text.matches("[0-9]*.[0-9]*");
-    }
+
 }

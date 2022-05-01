@@ -21,9 +21,12 @@ import java.util.stream.Collectors;
 public class HelloApplication extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, SQLException {
         FormHelper helper = new FormHelper();
-        helper.startPrimaryForm("/forms/main-menu-form.fxml", "Main Form");
+        FormHelper.connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/OrderAccounting.db");
+        ClientDaoImplementation cldi = new ClientDaoImplementation(FormHelper.connection);
+        FormHelper.transferData = cldi.getClient(BigInteger.valueOf(1));
+        helper.startPrimaryForm("/forms/edit-client-form.fxml", "Main Form");
     }
 
     public static void main(String[] args) {

@@ -18,9 +18,9 @@ public class CardDaoImplementation implements CardDao {
         stm = connection.createStatement();
     }
 
-    public CardDaoImplementation(Connection connection, Statement stm) throws SQLException {
+    public CardDaoImplementation(Connection connection) throws SQLException {
         this.connection = connection;
-        this.stm = stm;
+        this.stm = connection.createStatement();
     }
 
     @Override
