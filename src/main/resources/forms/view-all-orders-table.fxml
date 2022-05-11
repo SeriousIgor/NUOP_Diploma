@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="orderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllOrdersFormController">
+   <children>
+      <TableView fx:id="orderTableView" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
+         <columns>
+            <TableColumn fx:id="nameColumn" prefWidth="120.0" text="Name" />
+            <TableColumn fx:id="statusColumn" minWidth="0.0" prefWidth="120.0" text="Status" />
+            <TableColumn fx:id="priceColumn" minWidth="0.0" prefWidth="120.0" text="Price" />
+            <TableColumn fx:id="clientColumn" prefWidth="120.0" text="Client" />
+            <TableColumn fx:id="orderDateColumn" prefWidth="120.0" text="Order Date" />
+         </columns>
+      </TableView>
+   </children>
+</Pane>

@@ -15,5 +15,7 @@
       <Label layoutX="267.0" layoutY="28.0" text="Phone Number" />
       <Button fx:id="cancelButton" layoutX="267.0" layoutY="181.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
       <Button fx:id="okButton" layoutX="383.0" layoutY="181.0" mnemonicParsing="false" onAction="#onOKButtonClick" text="OK" />
+      <TextField fx:id="emailField" layoutX="267.0" layoutY="121.0" />
+      <Label layoutX="267.0" layoutY="96.0" text="Email" />
    </children>
 </Pane>

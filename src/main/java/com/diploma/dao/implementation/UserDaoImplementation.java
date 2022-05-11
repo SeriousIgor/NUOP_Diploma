@@ -18,9 +18,9 @@ public class UserDaoImplementation implements UserDao {
         stm = connection.createStatement();
     }
 
-    public UserDaoImplementation(Connection connection, Statement stm) throws SQLException {
+    public UserDaoImplementation(Connection connection) throws SQLException {
         this.connection = connection;
-        this.stm = stm;
+        this.stm = connection.createStatement();
     }
 
     @Override
@@ -68,7 +68,8 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public Boolean createUser(User user) throws SQLException {
-        String query = UserDao.CREATE_USER + "'" + user.getUserName() + "', '" + user.getFirstName() + "', '" + user.getLastName() + "', '" + user.getPassword() + "')";
+        Integer isAdmin = user.isAdmin() ? 1 : 0;
+        String query = UserDao.CREATE_USER + "'" + user.getUserName() + "', '" + user.getFirstName() + "', '" + user.getLastName() + "', '" + user.getPassword()+ "', '" + isAdmin + "')";
         Boolean result = stm.executeUpdate(query) == 1;
 
         return result;

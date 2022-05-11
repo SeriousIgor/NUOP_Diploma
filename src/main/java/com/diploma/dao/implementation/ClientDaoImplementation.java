@@ -46,15 +46,21 @@ public class ClientDaoImplementation implements ClientDao {
     }
 
     @Override
+    public Collection<Client> getClientsWithoutCards() throws SQLException {
+        ResultSet resultSet = stm.executeQuery(ClientDao.GET_CLIENTS_WITHOUT_CARD);
+        return buildClientList(resultSet);
+    }
+
+    @Override
     public Boolean createCliend(Client client) throws SQLException {
-        String query = ClientDao.CREATE_CLIENT + "'" + client.getFirstName() + "', '" + client.getLastName() + "', '" + client.getPhoneNumber() + "')";
+        String query = ClientDao.CREATE_CLIENT + "'" + client.getFirstName() + "', '" + client.getLastName() + "', '" + client.getPhoneNumber() + "', '" + client.getEmail() + "')";
         Boolean result = stm.executeUpdate(query) == 1;
         return result;
     }
 
     @Override
     public Boolean updateClient(Client client) throws SQLException {
-        String query = ClientDao.UPDATE_CLIENT + "firstName = '" + client.getFirstName() + "', lastName = '" + client.getLastName() + "', phoneNumber = '" + client.getPhoneNumber() + "' WHERE clientId = " + client.getClientId();
+        String query = ClientDao.UPDATE_CLIENT + "firstName = '" + client.getFirstName() + "', lastName = '" + client.getLastName() + "', phoneNumber = '" + client.getPhoneNumber() + "', email = '" + client.getEmail() + "' WHERE clientId = " + client.getClientId();
         Boolean result = stm.executeUpdate(query) == 1;
         return result;
     }
@@ -70,8 +76,9 @@ public class ClientDaoImplementation implements ClientDao {
         String firstName = resultSet.getString("firstName");
         String lastName = resultSet.getString("lastName");
         String phoneNumber = resultSet.getString("phoneNumber");
+        String email = resultSet.getString("email");
         Boolean isDeleted = resultSet.getInt("isDeleted") == 1;
-        Client client = new Client(clientId, firstName, lastName, phoneNumber, isDeleted);
+        Client client = new Client(clientId, firstName, lastName, phoneNumber, email, isDeleted);
 
         return client;
     }

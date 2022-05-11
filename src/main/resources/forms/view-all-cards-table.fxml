@@ -4,9 +4,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllCardsFormController">
+<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllCardsFormController">
    <children>
-      <TableView layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
+      <TableView fx:id="cardTableView" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
          <columns>
             <TableColumn fx:id="clientColumn" prefWidth="150.0" text="Client" />
             <TableColumn fx:id="isDiscountColumn" minWidth="0.0" prefWidth="150.0" text="Is Discount" />

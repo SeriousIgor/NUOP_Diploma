@@ -4,9 +4,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllServicesFormController">
+<Pane fx:id="servicePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllServicesFormController">
    <children>
-      <TableView fx:id="nameColumn" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
+      <TableView fx:id="serviceTableView" layoutY="1.0" prefHeight="400.0" prefWidth="600.0">
          <columns>
             <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Name" />
             <TableColumn fx:id="priceColumn" minWidth="0.0" prefWidth="200.0" text="Price" />

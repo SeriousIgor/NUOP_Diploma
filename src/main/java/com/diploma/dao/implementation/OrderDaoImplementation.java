@@ -21,11 +21,11 @@ public class OrderDaoImplementation implements OrderDao {
         sdi = new ServiceDaoImplementation();
     }
 
-    public OrderDaoImplementation(Connection connection, Statement stm) throws SQLException {
+    public OrderDaoImplementation(Connection connection) throws SQLException {
         this.connection = connection;
-        this.stm = stm;
+        this.stm = connection.createStatement();
         this.osbdi = new OrderServiceBundleDaoImplementation(connection, stm);
-        this.sdi = new ServiceDaoImplementation(connection, stm);
+        this.sdi = new ServiceDaoImplementation(connection);
     }
     @Override
     public Order getOrder(BigInteger orderId) throws SQLException {
@@ -45,8 +45,9 @@ public class OrderDaoImplementation implements OrderDao {
             String clientFirstName = resultSet.getString("client.firstName");
             String clientLastName = resultSet.getString("client.lastName");
             String clientPhoneNumber = resultSet.getString("client.phoneNumber");
+            String email = resultSet.getString("client.email");
             Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
-            Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, clientIsDeleted);
+            Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, email, clientIsDeleted);
 
             BigInteger userId = BigInteger.valueOf(resultSet.getInt("user.userID"));
             String userUsername = resultSet.getString("user.username");
@@ -62,10 +63,12 @@ public class OrderDaoImplementation implements OrderDao {
             OrderStatus status = OrderStatus.valueOf(resultSet.getString("status"));
             Double price = resultSet.getDouble("price");
             String description = resultSet.getString("description");
+            Timestamp endDate = resultSet.getTimestamp("endDate");
+            Boolean isCardUsed = resultSet.getInt("isCardUsed") == 1;
             Boolean orderIsDeleted = resultSet.getInt("isDeleted") == 1;
 
 
-            Order order = new Order(orderId, name, status, price, description, orderDate, user, client, null, orderIsDeleted);
+            Order order = new Order(orderId, name, status, price, description, orderDate, endDate, user, client, isCardUsed, null,  orderIsDeleted);
 
             return order;
         } else {
@@ -105,11 +108,18 @@ public class OrderDaoImplementation implements OrderDao {
     }
 
     @Override
+    public Collection<Order> getAllOrders() throws SQLException {
+        ResultSet resultSet = stm.executeQuery(OrderDao.GET_ALL_ORDERS);
+        return buildOrderList(resultSet);
+    }
+
+
+    @Override
     public Boolean createOrder(Order order) throws SQLException {
         Timestamp currentDate = new Timestamp(new java.util.Date().getTime());
         Collection<Service> services = order.getServices();
 
-        String query = OrderDao.CREATE_ORDER + "'" + order.getName() + "', '" + order.getStatus() + "', '" + order.getPrice() + "', '" + order.getDescription() + "', '" + currentDate + "', '" + order.getUser().getUserId() + "', '" + order.getClient().getClientId() + "')";
+        String query = OrderDao.CREATE_ORDER + "'" + order.getName() + "', '" + order.getStatus() + "', '" + order.getPrice() + "', '" + order.getDescription() + "', '" + currentDate + "', '" + order.getUser().getUserId() + "', '" + order.getClient().getClientId() + "', '" + order.isCardUsed() + "')";
         Boolean orderCreationResult = stm.executeUpdate(query) == 1;
         order = getOrder(currentDate);
 
@@ -127,7 +137,7 @@ public class OrderDaoImplementation implements OrderDao {
     public Boolean updateOrder(Order order) throws SQLException {
         Collection<Service> oldServices = getOrder(order.getOrderId()).getServices();
         Collection<Service> newServices = order.getServices();
-        String query = OrderDao.UPDATE_ORDER + "name ='" + order.getName() + "', status = '" + order.getStatus() + "', price = '" + order.getPrice() + "', description = '" + order.getDescription() + "', orderDate = '" + order.getOrderDate() + "', userId = " + order.getUser().getUserId() + ", clientId = " + order.getClient().getClientId() + " WHERE orderId = " + order.getOrderId();
+        String query = OrderDao.UPDATE_ORDER + "name ='" + order.getName() + "', status = '" + order.getStatus() + "', price = '" + order.getPrice() + "', description = '" + order.getDescription() + "', orderDate = '" + order.getOrderDate() + "', endDate = '" + order.getEndDate() + "', userId = " + order.getUser().getUserId() + ", clientId = " + order.getClient().getClientId() + ", isCardUsed = " + order.isCardUsed() + " WHERE orderId = " + order.getOrderId();
         Boolean orderUpdateResult = stm.executeUpdate(query) == 1;
         for(Service oldS : oldServices){
             for(Service newS : newServices){
@@ -181,8 +191,9 @@ public class OrderDaoImplementation implements OrderDao {
         String clientFirstName = resultSet.getString("client.firstName");
         String clientLastName = resultSet.getString("client.lastName");
         String clientPhoneNumber = resultSet.getString("client.phoneNumber");
+        String clientEmail = resultSet.getString("client.email");
         Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
-        Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, clientIsDeleted);
+        Client client = new Client(clientId, clientFirstName, clientLastName, clientPhoneNumber, clientEmail, clientIsDeleted);
 
         BigInteger userId = BigInteger.valueOf(resultSet.getInt("user.userID"));
         String userUsername = resultSet.getString("user.username");
@@ -199,16 +210,18 @@ public class OrderDaoImplementation implements OrderDao {
         Double price = resultSet.getDouble("price");
         String description = resultSet.getString("description");
         Timestamp orderDate = resultSet.getTimestamp("orderDate");
+        Timestamp endDate = resultSet.getTimestamp("endDate");
+        Boolean isCardUsed = resultSet.getInt("isCardUsed") == 1;
         Boolean orderIsDeleted = resultSet.getInt("isDeleted") == 1;
 
         Collection<OrderServiceBundle> osbList = osbdi.getOrderServiceBundles(orderId);
-        Collection<Service> services = new ArrayList<Service>();
+        Collection<Service> services = new ArrayList<>();
         for(OrderServiceBundle osb : osbList){
             Service service = sdi.getService(osb.getServiceId());
             services.add(service);
         }
 
-        Order order = new Order(orderId, name, status, price, description, orderDate, user, client, services, orderIsDeleted);
+        Order order = new Order(orderId, name, status, price, description, orderDate, endDate, user, client, isCardUsed, services, orderIsDeleted);
 
         return order;
     }

@@ -13,20 +13,24 @@ public class Order {
     private Double price;
     private String description;
     private Timestamp orderDate;
+    private Timestamp endDate;
     private User user;
     private Client client;
+    private boolean isCardUsed;
     private Collection<Service> services;
     private boolean isDeleted;
 
-    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, User user, Client client, Collection<Service> services, boolean isDeleted) {
+    public Order(BigInteger orderId, String name, OrderStatus status, Double price, String description, Timestamp orderDate, Timestamp endDate, User user, Client client, boolean isCardUsed, Collection<Service> services, boolean isDeleted) {
         this.orderId = orderId;
         this.name = name;
         this.status = status;
         this.price = price;
         this.description = description;
         this.orderDate = orderDate;
+        this.endDate = endDate;
         this.user = user;
         this.client = client;
+        this.isCardUsed = isCardUsed;
         this.services = services;
         this.isDeleted = isDeleted;
     }
@@ -79,6 +83,14 @@ public class Order {
         this.orderDate = orderDate;
     }
 
+    public Timestamp getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Timestamp endDate) {
+        this.endDate = endDate;
+    }
+
     public User getUser() {
         return user;
     }
@@ -93,6 +105,14 @@ public class Order {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public boolean isCardUsed() {
+        return isCardUsed;
+    }
+
+    public void setCardUsed(boolean cardUsed) {
+        isCardUsed = cardUsed;
     }
 
     public Collection<Service> getServices() {

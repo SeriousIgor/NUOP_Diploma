@@ -39,6 +39,10 @@ public class Card {
         return isDiscount;
     }
 
+    public boolean getIsDiscount(){
+        return isDiscount;
+    }
+
     public void setDiscount(boolean discount) {
         isDiscount = discount;
     }

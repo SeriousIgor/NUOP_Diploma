@@ -72,8 +72,9 @@ public class CardDaoImplementation implements CardDao {
             String firstName = resultSet.getString("firstName");
             String lastName = resultSet.getString("lastName");
             String phoneNumber = resultSet.getString("phoneNumber");
+            String email = resultSet.getString("email");
             Boolean clientIsDeleted = resultSet.getInt("client.isDeleted") == 1;
-            Client client = new Client(clientId, firstName, lastName, phoneNumber, clientIsDeleted);
+            Client client = new Client(clientId, firstName, lastName, phoneNumber, email, clientIsDeleted);
 
             BigInteger cardId = BigInteger.valueOf(resultSet.getInt("cardId"));
             Boolean isDiscount = resultSet.getInt("isDiscount") == 1;

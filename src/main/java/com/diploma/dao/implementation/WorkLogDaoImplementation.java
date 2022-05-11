@@ -20,9 +20,9 @@ public class WorkLogDaoImplementation implements WorkLogDao {
         stm = connection.createStatement();
     }
 
-    public WorkLogDaoImplementation(Connection connection, Statement stm) throws SQLException {
+    public WorkLogDaoImplementation(Connection connection) throws SQLException {
         this.connection = connection;
-        this.stm = stm;
+        this.stm = connection.createStatement();
     }
 
 

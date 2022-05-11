@@ -27,6 +27,9 @@ public class CreateClientFormController {
     private TextField lastNameField;
 
     @FXML
+    private TextField emailField;
+
+    @FXML
     private Button okButton;
 
     @FXML
@@ -60,7 +63,7 @@ public class CreateClientFormController {
 
     private boolean createClient() throws Exception {
         try{
-            Client client = new Client(null, firstNameField.getText(), lastNameField.getText(), phoneNumberField.getText(), false);
+            Client client = new Client(null, firstNameField.getText(), lastNameField.getText(), phoneNumberField.getText(), emailField.getText(), false);
             return cldi.createCliend(client);
         } catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);

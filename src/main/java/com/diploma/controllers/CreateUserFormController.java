@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class CreateUserFormController {
 
     @FXML
@@ -35,11 +37,17 @@ public class CreateUserFormController {
 
     private FormHelper fh;
 
+    private UserDaoImplementation udi;
+
+    private Boolean firstUser;
+
     @FXML
     protected void onOKButtonClick() throws Exception {
-        if(fh.validateFields(userPane) && createUser()){
-            Stage stage = (Stage) okButton.getScene().getWindow();
+        if(this.fh.validateFields(userPane) && createUser()){
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
+            String path = this.firstUser ? "/forms/main-menu-form.fxml" : "/forms/view-records-form.fxml";
+            this.fh.getScene(path);
         }
     }
 
@@ -47,21 +55,29 @@ public class CreateUserFormController {
     protected void onCancelButtonClick(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+        if(FormHelper.currentSession != null){
+            this.fh.getScene("/forms/view-records-form.fxml");
+        }
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws SQLException {
         this.fh = new FormHelper();
+        this.udi = new UserDaoImplementation(FormHelper.connection);
     }
 
     private boolean createUser() throws Exception {
+        this.firstUser = FormHelper.currentSession == null;
         try{
-            UserDaoImplementation udi = new UserDaoImplementation();
-            User newUser = new User(null, userNameField.getText(), firstNameField.getText(), lastNameField.getText(), passwordField.getText(), udi.getUsers().isEmpty(), false);
+            User newUser = new User(null, userNameField.getText(), firstNameField.getText(), lastNameField.getText(), passwordField.getText(), firstUser, false);
+            if(this.firstUser){
+                FormHelper.currentSession = newUser;
+            }
             return udi.createUser(newUser);
         } catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(ex.getMessage());
+            alert.setHeaderText(null);
             alert.show();
             return false;
         }

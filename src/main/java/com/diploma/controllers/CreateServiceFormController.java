@@ -8,11 +8,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.Serial;
+import java.sql.SQLException;
 
 public class CreateServiceFormController {
+
+    @FXML
+    private Pane servicePane;
 
     @FXML
     private TextField nameField;
@@ -31,11 +36,14 @@ public class CreateServiceFormController {
 
     private FormHelper fh;
 
+    private ServiceDaoImplementation sdi;
+
     @FXML
-    protected void onOKButtonClick() throws Exception{
-        if(createService()){
-            Stage stage = (Stage) okButton.getScene().getWindow();
+    protected void onOKButtonClick(){
+        if(fh.validateFields(servicePane) && createService()){
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
+            fh.getScene("/forms/view-records-form.fxml");
         }
     }
 
@@ -43,18 +51,25 @@ public class CreateServiceFormController {
     protected void onCancelButtonClick(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
+        fh.getScene("/forms/view-records-form.fxml");
     }
 
-    private boolean createService() throws Exception{
+    @FXML
+    void initialize() throws SQLException {
+        this.fh = new FormHelper();
+        this.sdi = new ServiceDaoImplementation(FormHelper.connection);
+    }
+
+    private boolean createService(){
         try{
             if(!fh.validateNumber(priceField.getText())){
                 throw new Exception("Only numbers allowed");
             }
             Service service = new Service(null, nameField.getText(), Double.valueOf(priceField.getText()), descriptionField.getText(), false);
-            ServiceDaoImplementation sdi = new ServiceDaoImplementation();
             return sdi.createService(service);
         } catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
             alert.setContentText(ex.getMessage());
             alert.show();
             return false;

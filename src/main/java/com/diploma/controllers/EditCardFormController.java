@@ -1,13 +1,10 @@
 package com.diploma.controllers;
 
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 import com.diploma.dao.implementation.CardDaoImplementation;
 import com.diploma.helpers.FormHelper;
 import com.diploma.models.Card;
-import com.diploma.models.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -69,6 +66,7 @@ public class EditCardFormController {
 
     @FXML
     void onCancelButtonClick(ActionEvent event) {
+        FormHelper.transferData = null;
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
         fh.getScene("/forms/view-records-form.fxml");
@@ -77,6 +75,7 @@ public class EditCardFormController {
     @FXML
     void onOKButtonClick(ActionEvent event) {
         if(fh.validateFields(cardPane) && updateCard()){
+            FormHelper.transferData = null;
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
             fh.getScene("/forms/view-records-form.fxml");

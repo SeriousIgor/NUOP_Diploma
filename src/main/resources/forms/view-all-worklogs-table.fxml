@@ -3,7 +3,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<TableView prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllWorklogsFormController">
+<TableView fx:id="workLogTableView" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.ViewAllWorklogsFormController">
    <columns>
       <TableColumn fx:id="userColumn" prefWidth="200.0" text="User" />
       <TableColumn fx:id="actionColumn" minWidth="0.0" prefWidth="200.0" text="Action" />

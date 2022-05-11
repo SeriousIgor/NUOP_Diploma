@@ -44,6 +44,9 @@ public class EditClientFormController {
     @FXML
     private TextField phoneNumberField;
 
+    @FXML
+    private TextField emailField;
+
     private FormHelper fh;
 
     private ClientDaoImplementation cldi;
@@ -52,6 +55,7 @@ public class EditClientFormController {
 
     @FXML
     void onCancelButtonClick(ActionEvent event) {
+        FormHelper.transferData = null;
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
         fh.getScene("/forms/view-records-form.fxml");
@@ -60,6 +64,7 @@ public class EditClientFormController {
     @FXML
     void onOKButtonClick(ActionEvent event) {
         if(fh.validateFields(clientPane) && updateClient()){
+            FormHelper.transferData = null;
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
             fh.getScene("/forms/view-records-form.fxml");
@@ -103,12 +108,14 @@ public class EditClientFormController {
         this.firstNameField.setText(client.getFirstName());
         this.lastNameField.setText(client.getLastName());
         this.phoneNumberField.setText(client.getPhoneNumber());
+        this.emailField.setText(client.getEmail());
     }
 
     private boolean updateClient(){
         this.client.setFirstName(firstNameField.getText());
         this.client.setLastName(lastNameField.getText());
         this.client.setPhoneNumber(phoneNumberField.getText());
+        this.client.setEmail(emailField.getText());
         try{
             return cldi.updateClient(client);
         } catch (Exception ex){

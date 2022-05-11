@@ -33,7 +33,7 @@ public interface UserDao {
 
     String GET_USERS_BY_NAME = "SELECT userId, username, firstName, lastName, password, isAdmin, isDeleted FROM User WHERE isDeleted = 0 AND (firstName like ";
 
-    String CREATE_USER = "INSERT INTO User (username, firstName, lastName, password) VALUES (";
+    String CREATE_USER = "INSERT INTO User (username, firstName, lastName, password, isAdmin) VALUES (";
 
     String UPDATE_USER = "UPDATE User SET ";
 

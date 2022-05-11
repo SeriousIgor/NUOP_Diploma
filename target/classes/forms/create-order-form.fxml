@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="orderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.CreateOrderFormController">
+<Pane fx:id="orderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.CreateOrderFormController">
    <children>
-      <TextField fx:id="nameField" layoutX="36.0" layoutY="64.0" />
+      <TextField fx:id="nameField" editable="false" layoutX="36.0" layoutY="64.0" />
       <Label layoutX="36.0" layoutY="39.0" text="Name" />
       <Label layoutX="36.0" layoutY="109.0" text="Status" />
       <ComboBox fx:id="statusComboBox" disable="true" layoutX="35.0" layoutY="139.0" prefWidth="150.0" />
-      <TextField fx:id="clientField" layoutX="36.0" layoutY="294.0" />
       <Label layoutX="36.0" layoutY="269.0" text="Client" />
-      <Label layoutX="249.0" layoutY="39.0" text="Services" />
-      <TextArea fx:id="serviceField" layoutX="249.0" layoutY="64.0" prefHeight="180.0" prefWidth="149.0" />
-      <TextField fx:id="priceField" disable="true" layoutX="36.0" layoutY="225.0" />
+      <TextField fx:id="priceField" disable="true" layoutX="36.0" layoutY="225.0" text="0" />
       <Label layoutX="36.0" layoutY="200.0" text="Price" />
-      <Label layoutX="455.0" layoutY="39.0" text="Description" />
-      <TextArea fx:id="descriptionField" layoutX="455.0" layoutY="64.0" prefHeight="180.0" prefWidth="149.0" />
-      <Button fx:id="cancelButton" layoutX="455.0" layoutY="294.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
-      <Button fx:id="okButton" layoutX="571.0" layoutY="294.0" mnemonicParsing="false" onAction="#onOKButtonClick" text="OK" />
+      <Button fx:id="cancelButton" layoutX="459.0" layoutY="369.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
+      <Button fx:id="okButton" layoutX="571.0" layoutY="369.0" mnemonicParsing="false" onAction="#onOKButtonClick" text="OK" />
+      <ComboBox fx:id="serviceComboBox" layoutX="248.0" layoutY="296.0" onAction="#onServiceComboboxItemChoose" prefWidth="150.0" />
+      <Label layoutX="248.0" layoutY="271.0" text="Choose Service" />
+      <ComboBox fx:id="clientComboBox" layoutX="35.0" layoutY="294.0" onAction="#onClientComboBoxItemChoose" prefWidth="150.0" />
+      <Label layoutX="248.0" layoutY="39.0" text="Services" />
+      <TextArea fx:id="serviceField" editable="false" layoutX="248.0" layoutY="64.0" prefHeight="180.0" prefWidth="149.0" />
+      <Label layoutX="454.0" layoutY="37.0" text="Description" />
+      <TextArea fx:id="descriptionField" layoutX="454.0" layoutY="62.0" prefHeight="259.0" prefWidth="149.0" wrapText="true" />
+      <Button fx:id="clearButton" layoutX="248.0" layoutY="369.0" mnemonicParsing="false" onAction="#onClearButtonClick" text="Clear Services list" />
+      <CheckBox fx:id="useCardCheckBox" layoutX="37.0" layoutY="337.0" mnemonicParsing="false" onAction="#onUseCardCheckBoxCheck" text="Use Card" visible="false" />
+      <CheckBox fx:id="useBonusesCheckBox" layoutX="37.0" layoutY="373.0" mnemonicParsing="false" text="Use Bonuses" visible="false" />
    </children>
 </Pane>

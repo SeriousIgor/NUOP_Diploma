@@ -18,9 +18,9 @@ public class ServiceDaoImplementation implements ServiceDao {
         stm = connection.createStatement();
     }
 
-    public ServiceDaoImplementation(Connection connection, Statement stm) throws SQLException {
+    public ServiceDaoImplementation(Connection connection) throws SQLException {
         this.connection = connection;
-        this.stm = stm;
+        this.stm = connection.createStatement();
     }
 
     @Override
