@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="210.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.diploma.controllers.LoginFormController">
+   <children>
+      <TextField fx:id="userNameField" layoutX="30.0" layoutY="51.0" prefWidth="150.0" />
+      <Label layoutX="33.0" layoutY="26.0" text="Username" />
+      <TextField fx:id="passwordField" layoutX="30.0" layoutY="119.0" prefWidth="150.0" />
+      <Label layoutX="33.0" layoutY="94.0" text="Password" />
+      <Button fx:id="cancelButton" layoutX="32.0" layoutY="181.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
+      <Button fx:id="okButton" layoutX="149.0" layoutY="181.0" mnemonicParsing="false" onAction="#onOKButtonClick" text="OK" />
+   </children>
+</Pane>
